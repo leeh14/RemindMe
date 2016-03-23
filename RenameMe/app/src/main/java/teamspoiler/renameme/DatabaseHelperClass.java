@@ -1,8 +1,12 @@
 package teamspoiler.renameme;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import org.joda.time.LocalTime;
 
 /**
  * Created by hirats on 3/18/2016.
@@ -68,16 +72,38 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    /*public boolean insertData(String name, String surname, String marks) {
+    public boolean addCategory(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ITEM_NAME, name);
-        contentValues.put(ITEM_DATE, surname);
-        contentValues.put(ITEM_NOTE, marks);
+        contentValues.put(CATEGORY_NAME, name);
         return (db.insert(TABLE_ITEMS, null, contentValues) != -1);
     }
 
-    public Cursor getAllData() {
+    public boolean addItem(String name, String categoryName, LocalTime date, String note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ITEM_NAME, name);
+        contentValues.put(ITEM_DATE, date.toString());
+        contentValues.put(ITEM_NOTE, note);
+        String query = String.format("SELECT %1$s FROM %2$s WHERE %3s = ?", KEY_ID, TABLE_CATEGORIES, CATEGORY_NAME);
+        Cursor result = db.rawQuery(query, new String[]{categoryName});
+        if(result.getCount() > 0) {
+            result.moveToNext();
+            contentValues.put(ITEM_CATEGORY_KEY_ID, result.getString(0));
+            return (db.insert(TABLE_ITEMS, null, contentValues) != -1);
+        }
+        return false;
+    }
+
+    public boolean addFriend(String name, String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FRIEND_NAME, name);
+        contentValues.put(FRIEND_USERNAME, username);
+        return (db.insert(TABLE_FRIENDS, null, contentValues) != -1);
+    }
+
+    /*public Cursor getAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = String.format("SELECT * FROM %1$s", TABLE_ITEMS);
         Cursor result = db.rawQuery(query, null);

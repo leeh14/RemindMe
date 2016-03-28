@@ -1,4 +1,4 @@
-package teamspoiler.renameme;
+package groupme.teamspoiler.android.myapplication;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -140,7 +140,7 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(CATEGORY_NAME, name);
-        db.update(TABLE_CATEGORIES, contentValues, "ID = ?", new String[]{id});
+        db.update(TABLE_CATEGORIES, contentValues, "ID = ?", new String[] {id});
         return true;
     }
     public boolean updateItem(String id, String name, String categoryID, LocalDateTime date, String note) {
@@ -151,7 +151,7 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
         contentValues.put(ITEM_DATE, formatter.print(date));
         contentValues.put(ITEM_NOTE, note);
         contentValues.put(ITEM_CATEGORY_KEY_ID, categoryID);
-        db.update(TABLE_ITEMS, contentValues, "ID = ?", new String[]{id});
+        db.update(TABLE_ITEMS,contentValues,"ID = ?", new String[] {id});
         return true;
     }
     public boolean updateFriend(String id, String name, String username) {
@@ -159,7 +159,7 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(FRIEND_NAME, name);
         contentValues.put(FRIEND_USERNAME, username);
-        db.update(TABLE_FRIENDS, contentValues, "ID = ?", new String[]{id});
+        db.update(TABLE_FRIENDS,contentValues,"ID = ?", new String[] {id});
         return true;
     }
 

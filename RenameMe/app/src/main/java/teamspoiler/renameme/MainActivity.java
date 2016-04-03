@@ -48,7 +48,7 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
 //                        }
 //                    });
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                    .setRootUrl("https://android-app-backend.appspot.com/_ah/api/");
+                    .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
             // end options for devappserver
 
             myApiService = builder.build();
@@ -58,7 +58,8 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
         String name = params[0].second;
 
         try {
-            return myApiService.sayHi(name).execute().getData();
+            return myApiService.sayNO(name).execute().getData();
+            //return myApiService.sayHi(name).execute().getData();
         } catch (IOException e) {
             return e.getMessage();
         }
@@ -73,7 +74,7 @@ public class MainActivity  extends AppCompatActivity{
     static String TAG = "TagTag";
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-         //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
+        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
     }

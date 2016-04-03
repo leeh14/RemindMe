@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import teamspoiler.renameme.MainActivity;
 import android.util.Log;
 
 public class LoginActivity extends AppCompatActivity {
@@ -49,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         }));
+        //creating mainactivity object
+        MainActivity main = new MainActivity();
     }
 
     public boolean checkValidity(String un, String pw) {

@@ -1,6 +1,7 @@
 package teamspoiler.renameme;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -20,7 +21,7 @@ import com.teamspoiler.game.remindme.backend.myApi.MyApi;
 //import com.google.android.gcm.server.Result;
 //import com.google.android.gcm.server.Sender;
 import java.io.IOException;
-
+import android.util.Log;
 
 /**
  * Created by game on 3/27/2016.
@@ -69,8 +70,11 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
     }
 }
 public class MainActivity  extends AppCompatActivity{
+    static String TAG = "TagTag";
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-         new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
+         //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
     }
 }

@@ -28,8 +28,8 @@
         <activity android:name=".ShareActivity" />
         <activity android:name=".FriendsActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".AddCategory" />
-        <activity android:name=".AddItem"></activity>
+        <activity android:name=".AddCategoryActivity" />
+        <activity android:name=".AddItemActivity"></activity>
     </application>
 
 </manifest>

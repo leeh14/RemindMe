@@ -3,7 +3,7 @@ package teamspoiler.renameme;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class AddCategory extends AppCompatActivity {
+public class AddCategoryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

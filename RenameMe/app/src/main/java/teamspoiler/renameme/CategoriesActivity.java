@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
 public class CategoriesActivity extends AppCompatActivity {
 
@@ -15,7 +19,8 @@ public class CategoriesActivity extends AppCompatActivity {
         initialize();
     }
 
-    public void initialize() {
+    // initialize
+    private void initialize() {
         final Button Friends = (Button) findViewById(R.id.Cates_FriendsButton);
         final Button Settings = (Button) findViewById(R.id.Cates_SettingButton);
         final Button AddCate = (Button) findViewById(R.id.Cates_AddCategoryButton);
@@ -38,20 +43,45 @@ public class CategoriesActivity extends AppCompatActivity {
            }
        }));
 
+        // set action for adding category button
         AddCate.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent AddCategory = new Intent(v.getContext(), CategoryActivity.class);
-                //startActivity(AddCategory);
+                Intent AddCategory = new Intent(CategoriesActivity.this,
+                                                AddCategoryActivity.class);
+                startActivity(AddCategory);
             }
         }));
 
+        // populate the category list
         populateCategoryList();
+        // set action for category list button
+        registerClickCallBack();
     }
 
     // populate the category list with category button
-    public void populateCategoryList() {
+    private void populateCategoryList() {
+        String[] categoriesList = {"milk", "documents", "sports", "homeworks"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this,
+                R.layout.data_categorieslist,
+                categoriesList);
+        ListView list = (ListView) findViewById(R.id.Cates_CategoriesList);
+        list.setAdapter(adapter);
+    }
 
+    // set action for category list button
+    private void registerClickCallBack() {
+        ListView list = (ListView) findViewById(R.id.Cates_CategoriesList);
+        list.setOnItemClickListener((new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
+                TextView textView = (TextView) viewClicked;
+                Intent i = new Intent(CategoriesActivity.this, CategoryActivity.class);
+                i.putExtra("Category_Name", textView.getText().toString());
+                startActivity(i);
+            }
+        }));
     }
 
 }

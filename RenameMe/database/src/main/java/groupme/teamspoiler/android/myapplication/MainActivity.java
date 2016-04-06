@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         StringBuffer buffer = new StringBuffer();
         buffer.append(String.format("ID: %1$s \n", category.getID()));
         buffer.append(String.format("Name: %1$s \n", category.getName()));
-        for (Item item: category) {
+        for (Item item: db.getItems(category.getID())) {
             buffer.append(resultToString(item));
         }
         buffer.append("\n");

@@ -172,6 +172,16 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
         }
         return items;
     }
+    public IterableMap<Item> getItems(int categoryID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = String.format("SELECT * FROM %1$s WHERE %2$s = ?", TABLE_ITEMS, ITEM_CATEGORY_KEY_ID);
+        Cursor result = db.rawQuery(query, new String[]{Integer.toString(categoryID)});
+        IterableMap<Item> items = new IterableMap<Item>();
+        while (result.moveToNext()) {
+            items.add(getItem(result));
+        }
+        return items;
+    }
     public Item getItem(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = String.format("SELECT * FROM %1$s WHERE %2$s = ?", TABLE_ITEMS, KEY_ID);

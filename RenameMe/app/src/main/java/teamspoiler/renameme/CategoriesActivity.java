@@ -10,7 +10,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import teamspoiler.renameme.DataElements.Category;
+import teamspoiler.renameme.DataElements.*;
+
 public class CategoriesActivity extends AppCompatActivity {
+    IterableMap<Category>  categories;
+    DatabaseHelperClass db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,8 @@ public class CategoriesActivity extends AppCompatActivity {
             }
         }));
 
+        db = new DatabaseHelperClass(this);
+        categories = db.getCategories();
         // populate the category list
         populateCategoryList();
         // set action for category list button
@@ -61,11 +68,18 @@ public class CategoriesActivity extends AppCompatActivity {
 
     // populate the category list with category button
     private void populateCategoryList() {
-        String[] categoriesList = {"milk", "documents", "sports", "homeworks"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        /*String[] categoryNames = new String[categories.size()];
+        int count = 0;
+        for (Category c : categories) {
+            categoryNames[count] = c.getName();
+            count++;
+        }
+        categories.add(new Category(1, "name"));*/
+
+        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
                 this,
                 R.layout.data_categorieslist,
-                categoriesList);
+                categories.toList());
         ListView list = (ListView) findViewById(R.id.Cates_CategoriesList);
         list.setAdapter(adapter);
     }
@@ -78,7 +92,9 @@ public class CategoriesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
                 TextView textView = (TextView) viewClicked;
                 Intent i = new Intent(CategoriesActivity.this, CategoryActivity.class);
-                i.putExtra("Category_Name", textView.getText().toString());
+                Category c = (Category)parent.getAdapter().getItem(position);
+                i.putExtra("Category_ID", c.getID());
+                //i.putExtra("Category_Name", textView.getText().toString());
                 startActivity(i);
             }
         }));

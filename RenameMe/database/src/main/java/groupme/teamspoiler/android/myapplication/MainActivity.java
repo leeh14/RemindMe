@@ -1,7 +1,8 @@
 package groupme.teamspoiler.android.myapplication;
 
+import groupme.teamspoiler.android.myapplication.DataElements.*;
+
 import android.app.AlertDialog;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,13 +12,18 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import org.joda.time.LocalDateTime;
 
 //Database test activity
 public class MainActivity extends AppCompatActivity {
     private DatabaseHelperClass db;
-    private Button btnViewCategories, btnViewItems, btnViewFriends;
+    private Button btnViewCategories, btnViewItems, btnViewFriends, btnAdd, delCatButton, delItemButton, delFriendButton;
+    private EditText nameView, usernameView, notesView, idView, categoryIDView;
+    private CheckBox viewAllCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +45,18 @@ public class MainActivity extends AppCompatActivity {
         btnViewCategories = (Button) findViewById(R.id.btnViewCategories);
         btnViewItems = (Button) findViewById(R.id.btnViewItems);
         btnViewFriends = (Button) findViewById(R.id.btnViewFriends);
-        viewData();
+        delCatButton = (Button) findViewById(R.id.delCatButton);
+        delItemButton = (Button) findViewById(R.id.delItemButton);
+        delFriendButton = (Button) findViewById(R.id.delFriendButton);
+        btnAdd = (Button) findViewById(R.id.addButton);
+        nameView = (EditText)findViewById(R.id.nameView);
+        usernameView = (EditText)findViewById(R.id.usernameView);
+        notesView = (EditText)findViewById(R.id.notesView);
+        idView = (EditText)findViewById(R.id.idView);
+        categoryIDView = (EditText)findViewById(R.id.categoryIDView);
+        viewAllCheckBox = (CheckBox)findViewById(R.id.viewAllCheckBox);
+
+        initializeButtons();
         testMethod();
     }
 
@@ -57,35 +74,131 @@ public class MainActivity extends AppCompatActivity {
         db.deleteFriend("1");*/
     }
 
-    public void viewData() {
+    public void initializeButtons() {
         btnViewCategories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMessage("Data", resultToString(db.getCategoryData()));
+                showMessage("Data", (viewAllCheckBox.isChecked() ?
+                        resultToStringCategory(db.getCategories()) :
+                        resultToString(db.getCategory(Integer.parseInt(idView.getText().toString())))));
             }
         });
         btnViewItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMessage("Data", resultToString(db.getItemData()));
+                showMessage("Data", (viewAllCheckBox.isChecked() ?
+                        resultToStringItem(db.getItems()) :
+                        resultToString(db.getItem(Integer.parseInt(idView.getText().toString())))));
             }
         });
         btnViewFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMessage("Data", resultToString(db.getFriendData()));
+                showMessage("Data", (viewAllCheckBox.isChecked() ?
+                        resultToStringFriend(db.getFriends()) :
+                        resultToString(db.getFriend(Integer.parseInt(idView.getText().toString())))));
+            }
+        });
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Category category = new Category(nameView.getText().toString());
+                Item item = null;
+                if (!categoryIDView.getText().toString().isEmpty()) {
+                    item = new Item(nameView.getText().toString(), Integer.parseInt(categoryIDView.getText().toString()));
+                    item.setDate(LocalDateTime.now());
+                    item.setNote(notesView.getText().toString());
+                }
+                Friend friend = new Friend(nameView.getText().toString(), usernameView.getText().toString());
+
+                if (idView.getText().toString().isEmpty()) {
+                    if (!usernameView.getText().toString().isEmpty())
+                        db.addFriend(friend);
+                    else if (!categoryIDView.getText().toString().isEmpty())
+                        db.addItem(item);
+                    else
+                        db.addCategory(category);
+                }
+                else {
+                    category.setID(Integer.parseInt(idView.getText().toString()));
+                    if(item != null)
+                        item.setID(Integer.parseInt(idView.getText().toString()));
+                    friend.setID(Integer.parseInt(idView.getText().toString()));
+                    if (!usernameView.getText().toString().isEmpty())
+                        db.updateFriend(friend);
+                    else if (!categoryIDView.getText().toString().isEmpty())
+                        db.updateItem(item);
+                    else
+                        db.updateCategory(category);
+                }
+            }
+        });
+        delCatButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                db.deleteCategory(Integer.parseInt(idView.getText().toString()));
+            }
+        });
+        delItemButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                db.deleteItem(Integer.parseInt(idView.getText().toString()));
+            }
+        });
+        delFriendButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                db.deleteFriend(Integer.parseInt(idView.getText().toString()));
             }
         });
     }
 
-    public String resultToString(Cursor result) {
+    public String resultToStringCategory(IterableMap<Category> map) {
         StringBuffer buffer = new StringBuffer();
-        while (result.moveToNext()) {
-            for (int i = 0; i < result.getColumnCount(); i++)
-                buffer.append(String.format("%1$s: %2$s \n", result.getColumnName(i), result.getString(i)));
-            buffer.append("\n");
+        for (Category category : map) {
+            buffer.append(resultToString(category));
         }
-        buffer.append("\n\n");
+        return buffer.toString();
+    }
+    public String resultToStringItem(IterableMap<Item> map) {
+        StringBuffer buffer = new StringBuffer();
+        for (Item item : map) {
+            buffer.append(resultToString(item));
+        }
+        return buffer.toString();
+    }
+    public String resultToStringFriend(IterableMap<Friend> map) {
+        StringBuffer buffer = new StringBuffer();
+        for (Friend friend : map) {
+            buffer.append(resultToString(friend));
+        }
+        return buffer.toString();
+    }
+    public String resultToString(Category category) {
+        if(category == null) return "";
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(String.format("ID: %1$s \n", category.getID()));
+        buffer.append(String.format("Name: %1$s \n", category.getName()));
+        for (Item item: category) {
+            buffer.append(resultToString(item));
+        }
+        buffer.append("\n");
+        return buffer.toString();
+    }
+    public String resultToString(Item item) {
+        if(item == null) return "";
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(String.format("ID: %1$s \n", item.getID()));
+        buffer.append(String.format("Name: %1$s \n", item.getName()));
+        if (item.getDate() != null)
+            buffer.append(String.format("Date: %1$s \n", item.getDate().toString()));
+        buffer.append(String.format("Note: %1$s \n", item.getNote().toString()));
+        buffer.append("\n");
+        return buffer.toString();
+    }
+    public String resultToString(Friend friend) {
+        if(friend == null) return "";
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(String.format("ID: %1$s \n", friend.getID()));
+        buffer.append(String.format("Name: %1$s \n", friend.getName()));
+        buffer.append(String.format("Username: %1$s \n", friend.getUsername()));
+        buffer.append("\n");
         return buffer.toString();
     }
 

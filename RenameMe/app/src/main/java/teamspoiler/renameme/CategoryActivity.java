@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-public class CategoryActivity extends AppCompatActivity {
+import teamspoiler.renameme.DataElements.*;
 
-    static String name;
+public class CategoryActivity extends AppCompatActivity {
+    DatabaseHelperClass db;
+    static int id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,10 +19,11 @@ public class CategoryActivity extends AppCompatActivity {
     private void initialize() {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            name = extras.getString("Category_Name");
+            id = extras.getInt("Category_ID");
         }
-
+        db = new DatabaseHelperClass(this);
+        Category category = db.getCategory(id);
         TextView categoryTitle = (TextView)findViewById(R.id.Cate_Title);
-        categoryTitle.setText(name);
+        categoryTitle.setText(category.getName());
     }
 }

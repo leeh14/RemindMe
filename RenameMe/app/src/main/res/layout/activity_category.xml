@@ -81,7 +81,7 @@ tools:context="spoiler.ui.CategoryActivity">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+Add New Item"
-        android:id="@+id/Cate_AddCategoryButton"
+        android:id="@+id/Cate_AddItemButton"
         android:layout_alignTop="@+id/Cate_ShareButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -91,7 +91,7 @@ tools:context="spoiler.ui.CategoryActivity">
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Cate_CategoryList"
+        android:id="@+id/Cate_ItemsList"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/Cate_Text"

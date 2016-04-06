@@ -9,4 +9,53 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="teamspoiler.renameme.AddCategoryActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Add Category"
+        android:textSize="55sp"
+        android:id="@+id/AddCate_Title"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Category Name"
+        android:id="@+id/AddCate_CategoryNameTtile"
+        android:layout_below="@+id/AddCate_Title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/AddCate_InputName"
+        android:layout_below="@+id/AddCate_CategoryNameTtile"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20sp" />
+
+    <Button
+        android:layout_width="120sp"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/AddCate_SaveButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/AddCate_Title"
+        android:layout_alignStart="@+id/AddCate_Title"
+        android:layout_marginBottom="87dp" />
+
+    <Button
+        android:layout_width="120sp"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:id="@+id/AddCate_CancelButton"
+        android:layout_alignTop="@+id/AddCate_SaveButton"
+        android:layout_alignRight="@+id/AddCate_Title"
+        android:layout_alignEnd="@+id/AddCate_Title" />
 </RelativeLayout>

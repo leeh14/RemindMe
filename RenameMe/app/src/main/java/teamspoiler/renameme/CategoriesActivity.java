@@ -22,7 +22,7 @@ public class CategoriesActivity extends AppCompatActivity {
     // initialize
     private void initialize() {
         final Button Friends = (Button) findViewById(R.id.Cates_FriendsButton);
-        final Button Settings = (Button) findViewById(R.id.Cates_SettingButton);
+        final Button Settings = (Button) findViewById(R.id.Cates_SettingsButton);
         final Button AddCate = (Button) findViewById(R.id.Cates_AddCategoryButton);
 
         // set action for friend button at top
@@ -61,7 +61,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
     // populate the category list with category button
     private void populateCategoryList() {
-        String[] categoriesList = {"milk", "documents", "sports", "homeworks"};
+        String[] categoriesList = {"groceries", "documents", "sports", "homeworks"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this,
                 R.layout.data_categorieslist,

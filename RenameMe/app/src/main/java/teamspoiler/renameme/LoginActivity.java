@@ -20,7 +20,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void initialize() {
-        Button submit = (Button) findViewById(R.id.login_SubmitButton);
+        final Button submit = (Button) findViewById(R.id.login_SubmitButton);
         final EditText username = (EditText) findViewById(R.id.login_UserNameInput);
         final EditText password = (EditText) findViewById(R.id.login_PasswordInput);
 

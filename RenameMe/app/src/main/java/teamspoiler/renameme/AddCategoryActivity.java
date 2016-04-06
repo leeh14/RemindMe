@@ -7,11 +7,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class AddCategoryActivity extends AppCompatActivity {
+    DatabaseHelperClass db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
+<<<<<<< HEAD
         initialize();
     }
 
@@ -37,5 +39,11 @@ public class AddCategoryActivity extends AppCompatActivity {
                 finish();
             }
         });
+=======
+        db = DatabaseHelperClass.getInstance(this);
+>>>>>>> e18cb68e069a9a3565eae2258e6ebb56fa926c21
     }
+
+
+    //Add category by simply calling db.addCategory(new Category(NAME));
 }

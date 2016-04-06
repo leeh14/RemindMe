@@ -10,9 +10,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class CategoryActivity extends AppCompatActivity {
+import teamspoiler.renameme.DataElements.*;
 
-    static String name;
+public class CategoryActivity extends AppCompatActivity {
+    DatabaseHelperClass db;
+    static int id;
+    Category category;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,10 +27,12 @@ public class CategoryActivity extends AppCompatActivity {
     private void initialize() {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            name = extras.getString("Category_Name");
+            id = extras.getInt("Category_ID");
         }
-
+        db = DatabaseHelperClass.getInstance(this);
+        category = db.getCategory(id);
         TextView categoryTitle = (TextView)findViewById(R.id.Cate_Title);
+<<<<<<< HEAD
         categoryTitle.setText(name);
 
         final Button Categories = (Button) findViewById(R.id.Cate_CategoriesButton);
@@ -106,5 +111,11 @@ public class CategoryActivity extends AppCompatActivity {
                 startActivity(i);
             }
         }));
+=======
+        categoryTitle.setText(category.getName());
+>>>>>>> e18cb68e069a9a3565eae2258e6ebb56fa926c21
     }
+
+    //To get items
+    //getItems(category.getID());
 }

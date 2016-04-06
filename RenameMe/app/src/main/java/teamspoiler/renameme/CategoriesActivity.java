@@ -68,10 +68,6 @@ public class CategoriesActivity extends AppCompatActivity {
 
     // populate the category list with category button
     private void populateCategoryList() {
-<<<<<<< HEAD
-        String[] categoriesList = {"groceries", "documents", "sports", "homeworks"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-=======
         /*String[] categoryNames = new String[categories.size()];
         int count = 0;
         for (Category c : categories) {
@@ -81,7 +77,6 @@ public class CategoriesActivity extends AppCompatActivity {
         categories.add(new Category(1, "name"));*/
 
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
->>>>>>> e18cb68e069a9a3565eae2258e6ebb56fa926c21
                 this,
                 R.layout.data_categorieslist,
                 categories.toList());

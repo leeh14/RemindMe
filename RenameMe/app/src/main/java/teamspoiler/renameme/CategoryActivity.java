@@ -31,9 +31,9 @@ public class CategoryActivity extends AppCompatActivity {
         }
         db = DatabaseHelperClass.getInstance(this);
         category = db.getCategory(id);
+
         TextView categoryTitle = (TextView)findViewById(R.id.Cate_Title);
-<<<<<<< HEAD
-        categoryTitle.setText(name);
+        categoryTitle.setText(category.getName());
 
         final Button Categories = (Button) findViewById(R.id.Cate_CategoriesButton);
         final Button Friends = (Button) findViewById(R.id.Cate_FriendsButton);
@@ -111,9 +111,6 @@ public class CategoryActivity extends AppCompatActivity {
                 startActivity(i);
             }
         }));
-=======
-        categoryTitle.setText(category.getName());
->>>>>>> e18cb68e069a9a3565eae2258e6ebb56fa926c21
     }
 
     //To get items

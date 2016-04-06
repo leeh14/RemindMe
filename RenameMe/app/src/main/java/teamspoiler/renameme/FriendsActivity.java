@@ -16,7 +16,7 @@ public class FriendsActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        db = new DatabaseHelperClass(this);
+        db = DatabaseHelperClass.getInstance(this);
         IterableMap<Friend> friends = db.getFriends();
         //Implement in a similar manner to categories
     }

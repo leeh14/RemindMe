@@ -58,7 +58,7 @@ public class CategoriesActivity extends AppCompatActivity {
             }
         }));
 
-        db = new DatabaseHelperClass(this);
+        db = DatabaseHelperClass.getInstance(this);
         categories = db.getCategories();
         // populate the category list
         populateCategoryList();

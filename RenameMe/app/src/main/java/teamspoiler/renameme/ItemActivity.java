@@ -13,7 +13,7 @@ public class ItemActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        db = new DatabaseHelperClass(this);
+        db = DatabaseHelperClass.getInstance(this);
         //Item item = db.getItem(itemID);
         //etc...
     }

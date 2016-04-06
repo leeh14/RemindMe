@@ -13,7 +13,7 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        db = new DatabaseHelperClass(this);
+        db = DatabaseHelperClass.getInstance(this);
     }
 
     //Item item = new Item(ITEMNAME); item.setDate(new LocalDateTime(int year, int month, int day, int hour, int minute));

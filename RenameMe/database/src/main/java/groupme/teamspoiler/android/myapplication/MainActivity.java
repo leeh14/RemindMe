@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        db = new DatabaseHelperClass(this);
+        db = DatabaseHelperClass.getInstance(this);
         btnViewCategories = (Button) findViewById(R.id.btnViewCategories);
         btnViewItems = (Button) findViewById(R.id.btnViewItems);
         btnViewFriends = (Button) findViewById(R.id.btnViewFriends);

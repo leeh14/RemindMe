@@ -61,11 +61,11 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
 
     public static DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
-    public DatabaseHelperClass(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    /*public DatabaseHelperClass(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
-    }
+    }*/
 
-    public DatabaseHelperClass(Context context) {
+    private DatabaseHelperClass(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
 

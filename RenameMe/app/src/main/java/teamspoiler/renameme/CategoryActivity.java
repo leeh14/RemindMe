@@ -9,6 +9,7 @@ import teamspoiler.renameme.DataElements.*;
 public class CategoryActivity extends AppCompatActivity {
     DatabaseHelperClass db;
     static int id;
+    Category category;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,9 +22,12 @@ public class CategoryActivity extends AppCompatActivity {
         if(extras != null){
             id = extras.getInt("Category_ID");
         }
-        db = new DatabaseHelperClass(this);
-        Category category = db.getCategory(id);
+        db = DatabaseHelperClass.getInstance(this);
+        category = db.getCategory(id);
         TextView categoryTitle = (TextView)findViewById(R.id.Cate_Title);
         categoryTitle.setText(category.getName());
     }
+
+    //To get items
+    //getItems(category.getID());
 }

@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import teamspoiler.renameme.MainActivity;
-import android.util.Log;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -19,11 +17,13 @@ public class LoginActivity extends AppCompatActivity {
         initialize();
     }
 
+    // initialize
     public void initialize() {
         final Button submit = (Button) findViewById(R.id.login_SubmitButton);
         final EditText username = (EditText) findViewById(R.id.login_UserNameInput);
         final EditText password = (EditText) findViewById(R.id.login_PasswordInput);
 
+        // the submit button function
         submit.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,13 +50,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         }));
-        //creating mainactivity object
-        MainActivity main = new MainActivity();
     }
 
+    // check for username and password validity
     public boolean checkValidity(String un, String pw) {
-        String unAns = "sdd";   // user name answer -> get from database
-        String pwAns = "sdd";   // user name password -> get from database
+        String unAns = "sdd";   // user name answer -> get from server
+        String pwAns = "sdd";   // user name password -> get from server
         if(unAns.equals(un) && pwAns.equals(pw)) {
             return true;
         }

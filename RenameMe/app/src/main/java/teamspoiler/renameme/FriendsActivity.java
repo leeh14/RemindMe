@@ -1,13 +1,21 @@
 package teamspoiler.renameme;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 
-import teamspoiler.renameme.DataElements.Friend;
-import teamspoiler.renameme.DataElements.IterableMap;
+import teamspoiler.renameme.DataElements.*;
 
 public class FriendsActivity extends AppCompatActivity {
     DatabaseHelperClass db;
+    IterableMap<Friend> friends;
+    static final int ADD_FRIEND_REQUEST = 1;  // The request code
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,9 +25,69 @@ public class FriendsActivity extends AppCompatActivity {
 
     private void initialize() {
         db = DatabaseHelperClass.getInstance(this);
-        IterableMap<Friend> friends = db.getFriends();
-        //Implement in a similar manner to categories
+        friends = db.getFriends();
+
+        final Button Categories = (Button) findViewById(R.id.Friends_CategoriesButton);
+        final Button Settings = (Button) findViewById(R.id.Friends_SettingsButton);
+        final Button AddFriend = (Button) findViewById(R.id.Friends_AddFriendButton);
+
+        // set action for friend button at top
+        Categories.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent CategoriesIntent = new Intent(v.getContext(), CategoriesActivity.class);
+                startActivity(CategoriesIntent);
+            }
+        }));
+
+        // set action for setting button at top
+        Settings.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent SettingsIntent = new Intent(v.getContext(), SettingsActivity.class);
+                startActivity(SettingsIntent);
+            }
+        }));
+
+        // set action for setting button at top
+        AddFriend.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent AddFriendIntent = new Intent(v.getContext(), AddFriendActivity.class);
+                startActivityForResult(AddFriendIntent, ADD_FRIEND_REQUEST);
+            }
+        }));
+        populateItemsList();
+        //registerClickCallBack();
     }
 
+    // populate the category list with category button
+    private void populateItemsList() {
+        ArrayAdapter<Friend> adapter = new ArrayAdapter<Friend>(
+                this,
+                R.layout.data_sharelist,
+                friends.toList());
+        ListView list = (ListView) findViewById(R.id.Friends_FriendList);
+        list.setAdapter(adapter);
+    }
 
+    // set action for category list button
+    private void registerClickCallBack() {
+        ListView list = (ListView) findViewById(R.id.Friends_FriendList);
+        list.setOnItemClickListener((new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
+
+            }
+        }));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // refresh the activity
+        if (requestCode == ADD_FRIEND_REQUEST) {
+            finish();
+            startActivity(getIntent());
+        }
+    }
 }

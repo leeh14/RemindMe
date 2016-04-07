@@ -13,9 +13,11 @@ import android.widget.TextView;
 import teamspoiler.renameme.DataElements.*;
 
 public class CategoryActivity extends AppCompatActivity {
-    DatabaseHelperClass db;
-    static int id;
-    Category category;
+    private DatabaseHelperClass db;             // reference to database helper class
+    static int cid;                             // id of the category
+    private Category category;                 // reference to category itself
+    private IterableMap<Item> items;           // reference to items inside category
+    static final int ADD_ITEM_REQUEST = 1;  // The request code
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,10 +29,11 @@ public class CategoryActivity extends AppCompatActivity {
     private void initialize() {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            id = extras.getInt("Category_ID");
+            cid = extras.getInt("Category_ID");
         }
         db = DatabaseHelperClass.getInstance(this);
-        category = db.getCategory(id);
+        category = db.getCategory(cid);
+        items = db.getItems(cid);
 
         TextView categoryTitle = (TextView)findViewById(R.id.Cate_Title);
         categoryTitle.setText(category.getName());
@@ -68,14 +71,17 @@ public class CategoryActivity extends AppCompatActivity {
             }
         }));
 
+        // set action for add item button at bottom
         AddItem.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent AddItemIntent = new Intent(v.getContext(), AddItemActivity.class);
-                startActivity(AddItemIntent);
+                AddItemIntent.putExtra("Category_ID", cid);
+                startActivityForResult(AddItemIntent, ADD_ITEM_REQUEST);
             }
         }));
 
+        // set action for share button at bottom
         Share.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,11 +96,10 @@ public class CategoryActivity extends AppCompatActivity {
 
     // populate the category list with category button
     private void populateItemsList() {
-        String[] itemsList = {"milk", "tea", "ham", "spaghetti"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(
                 this,
                 R.layout.data_itemslist,
-                itemsList);
+                items.toList());
         ListView list = (ListView) findViewById(R.id.Cate_ItemsList);
         list.setAdapter(adapter);
     }
@@ -105,14 +110,21 @@ public class CategoryActivity extends AppCompatActivity {
         list.setOnItemClickListener((new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
-                TextView textView = (TextView) viewClicked;
+                Item it = (Item) parent.getAdapter().getItem(position);
                 Intent i = new Intent(CategoryActivity.this, ItemActivity.class);
-                i.putExtra("Item_Name", textView.getText().toString());
+                i.putExtra("Category_ID", cid);
+                i.putExtra("Item_ID", it.getID());
                 startActivity(i);
             }
         }));
     }
 
-    //To get items
-    //getItems(category.getID());
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // refresh the activity
+        if (requestCode == ADD_ITEM_REQUEST) {
+            finish();
+            startActivity(getIntent());
+        }
+    }
 }

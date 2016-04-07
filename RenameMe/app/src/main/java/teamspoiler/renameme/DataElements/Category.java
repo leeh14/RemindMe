@@ -34,5 +34,6 @@ public class Category implements IDable, Iterable<Item> {
     public Iterator<Item> iterator() {
         return items.iterator();
     }
+
     public String toString() {return name;}
 }

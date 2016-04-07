@@ -7,13 +7,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
+
+import teamspoiler.renameme.DataElements.*;
 
 public class ShareCategoryActivity extends AppCompatActivity {
 
+    private DatabaseHelperClass db;
+    private IterableMap<Friend> friends;
     public static boolean[] selected;
 
     @Override
@@ -24,6 +28,8 @@ public class ShareCategoryActivity extends AppCompatActivity {
     }
 
     private void initialize(){
+        db = DatabaseHelperClass.getInstance(this);
+        friends = db.getFriends();
         final Button Save = (Button) findViewById(R.id.ShareCate_ShareButton);
         final Button Cancel = (Button) findViewById(R.id.ShareCate_CancelButton);
 
@@ -51,12 +57,11 @@ public class ShareCategoryActivity extends AppCompatActivity {
 
     // populate the category list with category button
     private void populateShareList() {
-        String[] shareList = {"Andy", "John", "Joe", "Sunny"};
-        selected = new boolean[shareList.length];
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        selected = new boolean[friends.toList().size()];
+        ArrayAdapter<Friend> adapter = new ArrayAdapter<Friend>(
                 this,
                 R.layout.data_sharelist,
-                shareList);
+                friends.toList());
         ListView list = (ListView) findViewById(R.id.ShareCate_ShareList);
         list.setAdapter(adapter);
     }

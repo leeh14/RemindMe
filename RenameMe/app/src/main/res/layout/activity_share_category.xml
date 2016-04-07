@@ -41,8 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ShareCate_ShareList"
-        android:layout_alignLeft="@+id/ShareCate_ShareButton"
-        android:layout_alignStart="@+id/ShareCate_ShareButton"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/ShareCate_Title"
         android:layout_above="@+id/ShareCate_ShareButton" />
 

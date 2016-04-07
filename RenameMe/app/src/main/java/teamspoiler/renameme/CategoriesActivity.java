@@ -8,14 +8,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import teamspoiler.renameme.DataElements.Category;
 import teamspoiler.renameme.DataElements.*;
 
 public class CategoriesActivity extends AppCompatActivity {
-    IterableMap<Category>  categories;
-    DatabaseHelperClass db;
+
+    private DatabaseHelperClass db;                  // reference to database helper class
+    private IterableMap<Category>  categories;     // categories data class
+    static final int ADD_CATEGORY_REQUEST = 1;  // The request code
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +54,11 @@ public class CategoriesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent AddCategory = new Intent(CategoriesActivity.this,
                                                 AddCategoryActivity.class);
-                startActivity(AddCategory);
+                startActivityForResult(AddCategory, ADD_CATEGORY_REQUEST);
             }
         }));
 
+        // get reference
         db = DatabaseHelperClass.getInstance(this);
         categories = db.getCategories();
         // populate the category list
@@ -68,14 +69,6 @@ public class CategoriesActivity extends AppCompatActivity {
 
     // populate the category list with category button
     private void populateCategoryList() {
-        /*String[] categoryNames = new String[categories.size()];
-        int count = 0;
-        for (Category c : categories) {
-            categoryNames[count] = c.getName();
-            count++;
-        }
-        categories.add(new Category(1, "name"));*/
-
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
                 this,
                 R.layout.data_categorieslist,
@@ -90,14 +83,20 @@ public class CategoriesActivity extends AppCompatActivity {
         list.setOnItemClickListener((new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
-                TextView textView = (TextView) viewClicked;
+                Category c = (Category) parent.getAdapter().getItem(position);
                 Intent i = new Intent(CategoriesActivity.this, CategoryActivity.class);
-                Category c = (Category)parent.getAdapter().getItem(position);
                 i.putExtra("Category_ID", c.getID());
-                //i.putExtra("Category_Name", textView.getText().toString());
                 startActivity(i);
             }
         }));
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // refresh the activity
+        if (requestCode == ADD_CATEGORY_REQUEST) {
+            finish();
+            startActivity(getIntent());
+        }
+    }
 }

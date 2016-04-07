@@ -9,32 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="spoiler.ui.ItemActivity">
 
-    <Button
-        android:layout_width="120sp"
-        android:layout_height="wrap_content"
-        android:text="Categories"
-        android:id="@+id/Item_CategoriesButton"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/Item_FriendsButton"
-        android:layout_toStartOf="@+id/Item_FriendsButton" />
-
-    <Button
-        android:layout_width="120sp"
-        android:layout_height="wrap_content"
-        android:text="Friends"
-        android:id="@+id/Item_FriendsButton"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="120sp"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        android:id="@+id/Item_SettingsButton"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/Item_FriendsButton"
-        android:layout_toEndOf="@+id/Item_FriendsButton" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,10 +16,9 @@
         android:text="Category Title"
         android:textSize="30sp"
         android:id="@+id/Item_CategoryTitle"
-        android:layout_below="@+id/Item_CategoriesButton"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -64,38 +37,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Expiration Date"
         android:id="@+id/Item_ExpDateText"
-        android:layout_alignTop="@+id/Item_ExpDatePicker"
+        android:layout_marginTop="46dp"
+        android:layout_below="@+id/Item_Name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <DatePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/Item_ExpDatePicker"
-        android:layout_marginTop="59dp"
-        android:layout_below="@+id/Item_Name"
-        android:layout_alignRight="@+id/Item_SettingsButton"
-        android:layout_alignEnd="@+id/Item_SettingsButton" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Reminder Schedule"
-        android:id="@+id/Item_RemScheduleText"
-        android:layout_below="@+id/Item_ExpDateText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="34dp" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/Item_RemScheduleSpinner"
-        android:layout_alignTop="@+id/Item_RemScheduleText"
-        android:layout_toRightOf="@+id/Item_FriendsButton"
-        android:layout_toEndOf="@+id/Item_FriendsButton"
-        android:layout_alignBottom="@+id/Item_RemScheduleText" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -103,21 +48,49 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Addition Note"
         android:id="@+id/Item_AddiNoteText"
-        android:layout_marginTop="35dp"
-        android:layout_below="@+id/Item_RemScheduleText"
+        android:layout_marginTop="66dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/Item_ExpDate" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="00/00/0000"
+        android:id="@+id/Item_ExpDate"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/Item_ExpDateText"
+        android:layout_alignParentLeft="true" />
+
+    <Button
+        android:layout_width="120sp"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        android:id="@+id/Item_EditButton"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <android.inputmethodservice.ExtractEditText
-        android:layout_width="wrap_content"
+    <Button
+        android:layout_width="120sp"
         android:layout_height="wrap_content"
-        android:text="Note"
-        android:id="@+id/Item_AddiNoteTextField"
-        android:layout_below="@+id/Item_AddiNoteText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:text="Share"
+        android:id="@+id/Item_ShareButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Note"
+        android:id="@+id/Item_Note"
+        android:layout_below="@+id/Item_AddiNoteText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/Item_EditButton"
+        android:layout_alignRight="@+id/Item_ShareButton"
+        android:layout_alignEnd="@+id/Item_ShareButton" />
 
 </RelativeLayout>

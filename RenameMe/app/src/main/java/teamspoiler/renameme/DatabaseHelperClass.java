@@ -59,7 +59,7 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
             String.format("CREATE table %1$s (%2$s INTEGER PRIMARY KEY AUTOINCREMENT, %3$s TEXT, %4$s TEXT)",
                     TABLE_FRIENDS, KEY_ID, FRIEND_NAME, FRIEND_USERNAME);
 
-    public static DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+    public static DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 
     /*public DatabaseHelperClass(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);

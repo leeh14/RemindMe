@@ -45,8 +45,10 @@ public class ItemActivity extends AppCompatActivity {
 
         CategoryTitle.setText(category.getName());
         ItemName.setText(item.getName());
-        ExpDate.setText(item.getDate().toString());
-        Note.setText(item.getNote());
+        if(item.getDate() != null)
+            ExpDate.setText(item.getDate().toString());
+        if (item.getNote() != null)
+            Note.setText(item.getNote());
 
         //Item item = db.getItem(itemID);
         //etc...

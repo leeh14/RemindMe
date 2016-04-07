@@ -57,8 +57,10 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
         context = params[0].first;
         String name = params[0].second;
 
+
         try {
-            return myApiService.sayNO(name).execute().getData();
+            return myApiService.connect().execute().getData();
+            //return myApiService.sayNO(name).execute().getData();
             //return myApiService.sayHi(name).execute().getData();
         } catch (IOException e) {
             return e.getMessage();
@@ -76,6 +78,7 @@ public class MainActivity  extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
         Intent i = new Intent(this, LoginActivity.class);
+
         startActivity(i);
     }
 }

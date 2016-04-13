@@ -13,9 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Category Title"
+        android:text="Item_Title"
         android:textSize="30sp"
-        android:id="@+id/Item_CategoryTitle"
+        android:id="@+id/Item_Name"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -24,21 +24,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Item Name"
-        android:textSize="25sp"
-        android:id="@+id/Item_Name"
-        android:layout_alignParentStart="true"
+        android:text="Category Title"
+        android:id="@+id/Item_Category"
         android:layout_below="@+id/Item_CategoryTitle"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Expiration Date"
-        android:id="@+id/Item_ExpDateText"
-        android:layout_marginTop="46dp"
-        android:layout_below="@+id/Item_Name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -46,12 +34,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Addition Note"
-        android:id="@+id/Item_AddiNoteText"
-        android:layout_marginTop="66dp"
+        android:text="Expiration Date"
+        android:id="@+id/Item_ExpDateTitle"
+        android:layout_below="@+id/Item_Category"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/Item_ExpDate" />
+        android:layout_marginTop="27dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Addition Note"
+        android:id="@+id/Item_AddiNoteTitle"
+        android:layout_below="@+id/Item_ExpTime"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -59,9 +58,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="00/00/0000"
         android:id="@+id/Item_ExpDate"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/Item_ExpDateText"
-        android:layout_alignParentLeft="true" />
+        android:layout_below="@+id/Item_ExpDateTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="120sp"
@@ -86,11 +85,43 @@
         android:layout_height="wrap_content"
         android:text="Note"
         android:id="@+id/Item_Note"
-        android:layout_below="@+id/Item_AddiNoteText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/Item_EditButton"
         android:layout_alignRight="@+id/Item_ShareButton"
-        android:layout_alignEnd="@+id/Item_ShareButton" />
+        android:layout_alignEnd="@+id/Item_ShareButton"
+        android:layout_below="@+id/Item_AddiNoteTitle" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Category"
+        android:id="@+id/Item_CategoryTitle"
+        android:layout_below="@+id/Item_Name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Expiration Time"
+        android:id="@+id/Item_ExpirationTimeTitle"
+        android:layout_marginTop="29dp"
+        android:layout_below="@+id/Item_ExpDate"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="00:00"
+        android:id="@+id/Item_ExpTime"
+        android:layout_below="@+id/Item_ExpirationTimeTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

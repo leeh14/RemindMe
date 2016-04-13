@@ -10,7 +10,7 @@ import teamspoiler.renameme.DataElements.*;
 
 public class AddFriendActivity extends AppCompatActivity {
 
-    DatabaseHelperClass db;
+    DatabaseHelperClass db;             // database reference
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,11 +20,12 @@ public class AddFriendActivity extends AppCompatActivity {
     }
 
     private void initialize(){
+        // get reference
         db = DatabaseHelperClass.getInstance(this);
         final Button Submit = (Button) findViewById(R.id.AddFriend_SubmitButton);
-        final Button Cancel = (Button) findViewById(R.id.AddCate_CancelButton);
+        final Button Cancel = (Button) findViewById(R.id.AddFriend_CancelButton);
 
-        // set action for friend button at top
+        // set action for submit button
         Submit.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -32,6 +33,14 @@ public class AddFriendActivity extends AppCompatActivity {
                 TextView name = (TextView) findViewById(R.id.AddFriend_NameInput);
                 Friend nf = new Friend(name.getText().toString(),username.getText().toString());
                 db.addFriend(nf);
+                finish();
+            }
+        }));
+
+        // set action for cancel button
+        Cancel.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
         }));

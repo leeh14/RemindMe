@@ -266,7 +266,7 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ITEM_NAME, item.getName());
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
         contentValues.put(ITEM_DATE, formatter.print(item.getDate()));
         contentValues.put(ITEM_NOTE, item.getNote());
         //contentValues.put(ITEM_CATEGORY_KEY_ID, categoryID);

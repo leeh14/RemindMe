@@ -73,12 +73,22 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
     }
 }
 public class MainActivity  extends AppCompatActivity{
-    static String TAG = "TagTag";
+
+    static final int START_APP = 1;  // The request code
+
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
-        Intent i = new Intent(this, LoginActivity.class);
 
-        startActivity(i);
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivityForResult(i, START_APP);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // close the activity when user return out of app
+        if (requestCode == START_APP) {
+            finish();
+        }
     }
 }

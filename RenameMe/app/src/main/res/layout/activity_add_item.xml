@@ -37,13 +37,12 @@
         android:ems="10"
         android:id="@+id/AddItem_NoteInput"
         android:text="Note"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/AddItem_SaveButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/AddItem_NoteTitle"
-        android:layout_above="@+id/AddItem_SaveButton"
-        android:layout_marginBottom="10dp" />
+        android:layout_alignRight="@+id/AddItem_CancelButton"
+        android:layout_alignEnd="@+id/AddItem_CancelButton" />
 
     <Button
         android:layout_width="wrap_content"
@@ -118,7 +117,8 @@
         android:id="@+id/AddItem_NoteTitle"
         android:layout_below="@+id/AddItem_ChangeTimeButton"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp" />
 
     <Button
         android:layout_width="120sp"

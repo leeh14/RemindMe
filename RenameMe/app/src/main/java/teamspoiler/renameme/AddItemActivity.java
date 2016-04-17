@@ -98,7 +98,6 @@ public class AddItemActivity extends AppCompatActivity {
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("TAGTAG", "value = " + sYear + sMonth + sDay + sHour + sMinute);
                 Item item = new Item(Name.getText().toString(), cid);
                 item.setDate(new LocalDateTime(sYear, sMonth, sDay, sHour, sMinute));
                 item.setNote(Note.getText().toString());

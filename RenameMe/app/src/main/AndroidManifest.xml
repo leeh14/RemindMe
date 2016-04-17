@@ -31,7 +31,8 @@
         <activity android:name=".AddItemActivity" />
         <activity android:name=".ShareItemActivity" />
         <activity android:name=".ShareCategoryActivity" />
-        <activity android:name=".AddFriendActivity"></activity>
+        <activity android:name=".AddFriendActivity" />
+        <activity android:name=".EditItemActivity"></activity>
     </application>
 
 </manifest>

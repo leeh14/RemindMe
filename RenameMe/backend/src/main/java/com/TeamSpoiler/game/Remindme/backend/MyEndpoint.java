@@ -17,6 +17,8 @@ import com.google.appengine.api.utils.SystemProperty;
 
 import javax.inject.Named;
 
+import sun.rmi.runtime.Log;
+
 /** An endpoint class we are exposing */
 @Api(
   name = "myApi",
@@ -46,7 +48,7 @@ public class MyEndpoint {
     public MyBean Connect() {
         MyBean response = new MyBean();
         String url = null;
-        response.setData("noithing");
+        response.setData("nothing");
         try {
             if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
                 Class.forName("com.mysql.jdbc.GoogleDriver");
@@ -58,8 +60,20 @@ public class MyEndpoint {
         try{
             Connection conn = DriverManager.getConnection(url);
             try {
-                conn.createStatement().execute("INSERT INTO users VALUES('hi', 'it works') ");
-                //conn.createStatement().executeQuery("INSERT INTO Users Values('crap')");
+                //conn.createStatement().execute("INSERT INTO users VALUES('username', 'password') ");
+                //returning framework for true and false
+//                ResultSet result =  conn.createStatement().executeQuery("select case when u.uid = 'hi' then 'true' else 'false' end from users u");
+
+//                while(result.next()) {
+//                    response.setData(result.getString(1));
+//                    //Log.W("Data", result.getString(2) );
+//                }
+                //response.setData(result.getString(2));
+                //table needs primary key in table in order to work
+//                ResultSet result =  conn.createStatement().executeQuery("select u.uid from users u where u.uid = 'username'");
+//                result.absolute(1);
+//                result.updateString(2, "wannabe");
+//                result.updateRow();
             }finally {
                 conn.close();
             }

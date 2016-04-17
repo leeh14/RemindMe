@@ -13,11 +13,12 @@ import android.widget.TextView;
 import teamspoiler.renameme.DataElements.*;
 
 public class CategoryActivity extends AppCompatActivity {
-    private DatabaseHelperClass db;             // reference to database helper class
-    static int cid;                             // id of the category
-    private Category category;                 // reference to category itself
-    private IterableMap<Item> items;           // reference to items inside category
-    static final int ADD_ITEM_REQUEST = 1;  // The request code
+    private DatabaseHelperClass db;                 // reference to database helper class
+    static int cid;                                 // id of the category
+    private Category category;                     // reference to category itself
+    private IterableMap<Item> items;               // reference to items inside category
+    static final int ADD_ITEM_REQUEST = 1;      // The request code
+    static final int UPDATE_TIME_REQUEST = 2;  // The request code 2
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +115,7 @@ public class CategoryActivity extends AppCompatActivity {
                 Intent i = new Intent(CategoryActivity.this, ItemActivity.class);
                 i.putExtra("Category_ID", cid);
                 i.putExtra("Item_ID", it.getID());
-                startActivity(i);
+                startActivityForResult(i, UPDATE_TIME_REQUEST);
             }
         }));
     }
@@ -122,7 +123,7 @@ public class CategoryActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // refresh the activity
-        if (requestCode == ADD_ITEM_REQUEST) {
+        if (requestCode == ADD_ITEM_REQUEST || requestCode == UPDATE_TIME_REQUEST) {
             finish();
             startActivity(getIntent());
         }

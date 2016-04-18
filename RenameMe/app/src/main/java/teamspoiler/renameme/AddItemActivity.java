@@ -99,9 +99,10 @@ public class AddItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Item item = new Item(Name.getText().toString(), cid);
-                item.setDate(new LocalDateTime(sYear, sMonth, sDay, sHour, sMinute));
+                item.setDate(new LocalDateTime(sYear, sMonth+1, sDay, sHour, sMinute));
                 item.setNote(Note.getText().toString());
                 db.addItem(item);
+                ItemNotification.notify(AddItemActivity.this, item);
                 finish();
             }
         });

@@ -8,8 +8,10 @@ import java.util.Iterator;
 public class Category implements IDable, Iterable<Item> {
     private int id;
     private String name;
+    //items stores all the items in the category
     private IterableMap<Item> items;
 
+    //constructor
     public Category(int id, String name) {
         this.id = id;
         this.name = name;
@@ -19,13 +21,16 @@ public class Category implements IDable, Iterable<Item> {
         this(0, name);
     }
 
-    //ID can only be set once
+    //get and set id
     public int getID() {return id;}
     public void setID(int id){
         this.id = id;
     }
+    //get and set name
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
+
+    //access the items that belong to the category
     public int itemCount() {return items.size();}
     public boolean addItem(Item item) {return items.add(item);}
     public Item getItem(int id) {return items.get(id);}

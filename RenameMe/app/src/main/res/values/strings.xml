@@ -3,4 +3,24 @@
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+
+    <!--Database strings-->
+    <string name="database_name">remind_me.db</string>
+    <!--Table names-->
+    <string name="table_categories">CATEGORIES</string>
+    <string name="table_items">ITEMS</string>
+    <string name="table_friends">FRIENDS</string>
+    <!--common column names-->
+    <string name="key_id">ID</string>
+    <string name="name">NAME</string>
+    <!--categories table column names-->
+    <!--items table column names-->
+    <string name="item_date">EXPIRATION_DATE</string>
+    <string name="item_note">NOTE</string>
+    <string name="item_category_key_id">CATEGORY_ID</string>
+    <!--friends table column names-->
+    <string name="friend_username">USERNAME</string>
+    <!--table creations-->
+
 </resources>

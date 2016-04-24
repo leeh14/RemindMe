@@ -19,6 +19,8 @@ public class LoginActivity extends AppCompatActivity {
 
     // initialize
     public void initialize() {
+
+
         final Button submit = (Button) findViewById(R.id.login_SubmitButton);
         final EditText username = (EditText) findViewById(R.id.login_UserNameInput);
         final EditText password = (EditText) findViewById(R.id.login_PasswordInput);
@@ -41,7 +43,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 // check if user name and password is valid
-                if(checkValidity(usernameText, passwordText)){
+                //if(checkValidity(usernameText, passwordText)){
+                //accessing the server api singleton
+                ServerAPI Servera = ServerAPI.getInstance(LoginActivity.this);
+                if(Servera.CheckAuthenticate(usernameText, passwordText)){
                     // move to CategoriesActivity
                     Intent i = new Intent(LoginActivity.this, CategoriesActivity.class);
                     startActivity(i);

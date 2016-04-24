@@ -30,6 +30,7 @@ import sun.rmi.runtime.Log;
   )
 )
 public class MyEndpoint {
+    //MyBean response = new MyBean();
     /** A simple endpoint method that takes a name and says Hi back */
     @ApiMethod(name = "sayHi")
     public MyBean sayHi(@Named("name") String name) {
@@ -60,7 +61,22 @@ public class MyEndpoint {
         try{
             Connection conn = DriverManager.getConnection(url);
             try {
-                //conn.createStatement().execute("INSERT INTO users VALUES('username', 'password') ");
+                //dropping a table
+                //conn.createStatement().execute("DROP TABLE users IF EXISTS;");
+                //createing the user table
+                //conn.createStatement().execute("CREATE TABLE users (u_id INTEGER AUTO_INCREMENT, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, PRIMARY KEY (u_id,username)) ;");
+                //insertinginto a table
+                //conn.createStatement().execute("INSERT INTO users(username, password) VALUES('sdd','sdd')");
+                //inserting into values
+                //conn.createStatement().execute("INSERT INTO users(username, password) VALUES('sdd','sdd')");
+
+                //createing the Categories  table
+                //conn.createStatement().execute("CREATE TABLE categories (cat_id INTEGER AUTO_INCREMENT, u_id INTEGER NOT NULL, cat_name VARCHAR(255) NOT NULL, PRIMARY KEY (cat_id,u_id)) ;");
+
+                //conn.createStatement().execute("DROP TABLE item");
+                //createing the item  table
+                //conn.createStatement().execute("CREATE TABLE item (item_id INTEGER AUTO_INCREMENT, u_id INTEGER NOT NULL, item_name VARCHAR(255) NOT NULL, cat_id INTEGER NOT NULL, PRIMARY KEY (item_id,u_id)) ;");
+
                 //returning framework for true and false
 //                ResultSet result =  conn.createStatement().executeQuery("select case when u.uid = 'hi' then 'true' else 'false' end from users u");
 
@@ -74,6 +90,77 @@ public class MyEndpoint {
 //                result.absolute(1);
 //                result.updateString(2, "wannabe");
 //                result.updateRow();
+            }finally {
+                conn.close();
+            }
+        }catch(SQLException e){
+            response.setData(e.toString());
+        }
+        return response;
+    }
+
+    @ApiMethod(name = "Authenticate")
+    public MyBean Authenticate(@Named("uname") String u_name, @Named ("upass") String u_pass) {
+        MyBean response = new MyBean();
+        String url = null;
+        response.setData("verify");
+        try {
+            if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+                Class.forName("com.mysql.jdbc.GoogleDriver");
+                url = "jdbc:google:mysql://headsup-1260:headsup/Users?user=root";
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            Connection conn = DriverManager.getConnection(url);
+            try {
+                ResultSet result =  conn.createStatement().executeQuery("select case when u.username = '"+u_name+ "' and u.password = '"+ u_pass+"'   then 'true' else 'false' end, u.u_id from users u");
+                //response.setData(result.getString(2));
+                while(result.next()) {
+                    response.setData(result.getString(1));
+                    response.setID(result.getInt(2));
+                    //Log.W("Data", result.getString(2) );
+                }
+            }finally {
+                conn.close();
+            }
+        }catch(SQLException e){
+            response.setData(e.toString());
+        }
+        return response;
+    }
+
+    @ApiMethod(name = "AddCategory")
+    public MyBean AddCategory(@Named("cat_name") String cat_name,@Named("userId") Integer userid ) {
+        MyBean response = new MyBean();
+        String url = null;
+        response.setData("addCategory");
+        try {
+            if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+                Class.forName("com.mysql.jdbc.GoogleDriver");
+                url = "jdbc:google:mysql://headsup-1260:headsup/Users?user=root";
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            Connection conn = DriverManager.getConnection(url);
+            try {
+//                ResultSet result =  conn.createStatement().executeQuery("SELECT c.cat_id FROM categories c  WHERE c.cat_id = '" +cat_name+"' AND c.u_id = '"+response.getUser_id()+"'; ");
+//                //response.setData(result.getString(2));
+//                while(result.next()) {
+//                    response.setData(result.getString(1));
+//                    //Log.W("Data", result.getString(2) );
+//                }
+//                //if empty add the item
+//                String cat = response.getData();
+//                if(cat.equals("")){
+//                    response.setData("Adding");
+//                    conn.createStatement().executeQuery("INSERT INTO category(u_id, cat_name) VALUES('"+response.getUser_id() +" ','"+cat_name + "')");
+//                }
+                response.setData("Adding");
+                conn.createStatement().execute("INSERT INTO categories(u_id, cat_name) VALUES('" + userid + " ','" + cat_name + "')");
             }finally {
                 conn.close();
             }

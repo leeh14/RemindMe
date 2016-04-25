@@ -1,5 +1,8 @@
 package teamspoiler.renameme;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +24,7 @@ public class CategoryActivity extends AppCompatActivity {
     static int cid;                                 // id of the category
     private Category category;                     // reference to category itself
     private IterableMap<Item> items;               // reference to items inside category
+    final Context context = this;                  // context of this activity
     static final int ADD_ITEM_REQUEST = 1;      // The request code
     static final int UPDATE_TIME_REQUEST = 2;  // The request code 2
 
@@ -49,6 +53,7 @@ public class CategoryActivity extends AppCompatActivity {
         final Button Settings = (Button) findViewById(R.id.Cate_SettingsButton);
         final Button AddItem = (Button) findViewById(R.id.Cate_AddItemButton);
         final Button Share = (Button) findViewById(R.id. Cate_ShareButton);
+        final Button Delete = (Button) findViewById(R.id.Cate_DeleteButton);
 
         // set action for categories button at top
         Categories.setOnClickListener((new View.OnClickListener() {
@@ -93,6 +98,42 @@ public class CategoryActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent ShareIntent = new Intent(v.getContext(), ShareCategoryActivity.class);
                 startActivity(ShareIntent);
+            }
+        }));
+
+        Delete.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        context);
+
+                // set title
+                String cName = category.getName();
+                alertDialogBuilder.setTitle("Delete Category");
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("Do you want to delete " + cName + "?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                db.deleteCategory(category.getID());
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // close the dialog
+                                dialog.cancel();
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
             }
         }));
 

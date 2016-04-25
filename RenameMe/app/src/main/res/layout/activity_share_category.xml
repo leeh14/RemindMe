@@ -15,7 +15,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Share Category"
         android:textSize="50sp"
-        android:id="@+id/ShareCate_Title"
+        android:id="@+id/ShareItem_Title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -34,15 +34,15 @@
         android:text="Cancel"
         android:id="@+id/ShareCate_CancelButton"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/ShareCate_Title"
-        android:layout_alignEnd="@+id/ShareCate_Title" />
+        android:layout_alignRight="@+id/ShareItem_Title"
+        android:layout_alignEnd="@+id/ShareItem_Title" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ShareCate_ShareList"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/ShareCate_Title"
+        android:layout_below="@+id/ShareItem_Title"
         android:layout_above="@+id/ShareCate_ShareButton" />
 
 </RelativeLayout>

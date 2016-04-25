@@ -1,5 +1,8 @@
 package teamspoiler.renameme;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +19,7 @@ public class ItemActivity extends AppCompatActivity {
     private int iid, cid;               // item id and category id
     private Category category;          // the category object
     private Item item;                  // the item object
+    final Context context = this;                  // context of this activity
 
     static final int EDIT_ITEM_REQUEST = 1;  // The request code
 
@@ -43,6 +47,7 @@ public class ItemActivity extends AppCompatActivity {
         final TextView Note = (TextView) findViewById(R.id.Item_Note);
         final Button Edit = (Button) findViewById(R.id.Item_EditButton);
         final Button Share = (Button) findViewById(R.id.Item_ShareButton);
+        final Button Delete = (Button) findViewById(R.id.Item_DeleteButton);
 
         CategoryTitle.setText(category.getName());
         ItemName.setText(item.getName());
@@ -71,7 +76,44 @@ public class ItemActivity extends AppCompatActivity {
         Share.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            // TO-DO implement the share button
+                Intent ShareItemIntent = new Intent(v.getContext(), ShareItemActivity.class);
+                ShareItemIntent.putExtra("Item_ID", iid);
+                startActivity(ShareItemIntent);
+            }
+        }));
+
+        Delete.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        context);
+
+                // set title
+                String iName = item.getName();
+                alertDialogBuilder.setTitle("Delete Item");
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("Do you want to delete " + iName + "?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                db.deleteItem(item.getID());
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // close the dialog
+                                dialog.cancel();
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
             }
         }));
     }

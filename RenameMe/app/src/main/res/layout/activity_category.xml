@@ -73,20 +73,16 @@ tools:context="spoiler.ui.CategoryActivity">
         android:text="Share"
         android:id="@+id/Cate_ShareButton"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/Cate_Text"
-        android:layout_alignRight="@+id/Cate_SortOptions"
-        android:layout_alignEnd="@+id/Cate_SortOptions" />
+        android:layout_toEndOf="@id/Cate_AddItemButton"
+        android:layout_toStartOf="@id/Cate_DeleteButton" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+Add New Item"
         android:id="@+id/Cate_AddItemButton"
-        android:layout_alignTop="@+id/Cate_ShareButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/Cate_ShareButton"
-        android:layout_toStartOf="@+id/Cate_ShareButton" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -96,5 +92,13 @@ tools:context="spoiler.ui.CategoryActivity">
         android:layout_alignParentStart="true"
         android:layout_below="@+id/Cate_Text"
         android:layout_above="@+id/Cate_ShareButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/Cate_DeleteButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/Cate_ItemsList" />
 
 </RelativeLayout>

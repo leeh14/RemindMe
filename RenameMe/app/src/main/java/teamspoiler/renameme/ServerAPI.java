@@ -9,8 +9,13 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.teamspoiler.game.remindme.backend.myApi.MyApi;
 
+import org.joda.time.LocalDateTime;
+
 import java.io.IOException;
+import java.sql.Date;
 import java.util.concurrent.ExecutionException;
+
+import teamspoiler.renameme.DataElements.Item;
 
 /**
  * Created by Elric on 4/24/2016.
@@ -43,6 +48,45 @@ class Authenticate extends AsyncTask<Pair<String,String>, Void, Pair<String, Int
         }
     }
 }
+class AddingItem extends AsyncTask< Integer, Void, String> {
+    private static MyApi myApiService = null;
+    private Context context;
+    private String item_name;
+    private String[] expirationarr;
+    private String expiration;
+    private Integer cat_id;
+    private String note;
+    public AddingItem(Item item){
+        item_name = item.getName();
+        expirationarr = item.getDate().toString().split("T");
+        String [] expirationtemp = expirationarr[1].split("\\.");
+        expiration = expirationarr[0].concat(" " +expirationtemp[0]);
+        cat_id = item.getCategoryID();
+        note = item.getNote();
+    }
+    @Override
+    protected String doInBackground(Integer... params) {
+        if (myApiService == null) {
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
+            // end options for devappserver
+
+            myApiService = builder.build();
+        }
+        Integer userId = params[0];
+        try {
+            String s =  myApiService.addItem(item_name, expiration, cat_id, userId, note).execute().getData();
+            return s;
+            //return  myApiService.connect().execute().getData();
+
+            //return myApiService.sayNO(name).execute().getData();
+//            //return myApiService.sayHi(name).execute().getData();
+        } catch (IOException e) {
+            return e.getMessage();
+        }
+    }
+
+}
 class AddingCategory extends AsyncTask<Pair<String,Integer>, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
@@ -60,6 +104,34 @@ class AddingCategory extends AsyncTask<Pair<String,Integer>, Void, String> {
         Integer user = params[0].second;
         try {
             String s =  myApiService.addCategory(cat_name, user).execute().getData();
+            return s;
+            //return  myApiService.connect().execute().getData();
+
+            //return myApiService.sayNO(name).execute().getData();
+            //return myApiService.sayHi(name).execute().getData();
+        } catch (IOException e) {
+            return e.getMessage();
+        }
+    }
+
+}
+class UpdatingCategory extends AsyncTask<Pair<String,Integer>, Void, String> {
+    private static MyApi myApiService = null;
+    private Context context;
+
+    @Override
+    protected String doInBackground(Pair<String, Integer>... params) {
+        if (myApiService == null) {
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
+            // end options for devappserver
+
+            myApiService = builder.build();
+        }
+        String cat_name = params[0].first;
+        Integer user = params[0].second;
+        try {
+            String s =  myApiService.updateCategory(cat_name, user).execute().getData();
             return s;
             //return  myApiService.connect().execute().getData();
 
@@ -123,6 +195,7 @@ public class ServerAPI {
     public Integer UserID;
     private Authenticate auth;
     private AddingCategory addingc;
+    private UpdatingCategory updatingc;
     private ServerAPI(Context context) {
         this.context = context;
     }
@@ -133,14 +206,56 @@ public class ServerAPI {
         }
         return sInstance;
     }
-    public String AddingCat(String c_name){
+    //connect is just used for testing purpose
+    public void Connect(){
+        EndpointsAsyncTask t  = new EndpointsAsyncTask();
+        t.execute(new Pair<Context, String>(context, "Manfred"));
+        //t.execute(new Pair<Context, String>(context, "Manfred"));
+    }
+
+    public void AddingCat(String c_name){
         addingc = new AddingCategory();
 
-        try {
-            String s = addingc.execute(new Pair<String, Integer>(c_name, UserID)).get();
+        //try {
+            //add .get() to end while testing for quick results
+            //String s = addingc.execute(new Pair<String, Integer>(c_name, UserID)).get();
+            addingc.execute(new Pair<String, Integer>(c_name, UserID));
             //String s = vali.Authentication(uname,upass);
             //works everywhere except debug mode
             String b = "sdf";
+            //return s;
+//        }
+//        catch (InterruptedException e )
+//        {
+//            Toast.makeText(context,e.getMessage(), Toast.LENGTH_LONG).show();
+//        }catch (ExecutionException b ) {
+//            Toast.makeText(context,b.getMessage(), Toast.LENGTH_LONG).show();
+//        }
+
+    }
+    public void UpdatingCat(String c_name){
+        updatingc = new UpdatingCategory();
+        updatingc.execute(new Pair<String, Integer>(c_name, UserID));
+//        try {
+            //String s = updatingc.execute(new Pair<String, Integer>(c_name, UserID)).get();
+            //String s = vali.Authentication(uname,upass);
+            //works everywhere except debug mode
+//            String b = "sdf";
+//            return s;
+//        }
+//        catch (InterruptedException e )
+//        {
+//            return e.getMessage();
+//        }catch (ExecutionException b ) {
+//            return b.getMessage();
+//        }
+
+    }
+    public String AddItem(Item item){
+        AddingItem addingi = new AddingItem(item);
+        try {
+            String s = addingi.execute( UserID).get();
+            String b = "asdfsad";
             return s;
         }
         catch (InterruptedException e )
@@ -149,8 +264,9 @@ public class ServerAPI {
         }catch (ExecutionException b ) {
             return b.getMessage();
         }
-
+        //return "asdf";
     }
+
     public boolean CheckAuthenticate(String uname,String upass ){
         auth = new Authenticate();
         try {
@@ -166,7 +282,5 @@ public class ServerAPI {
         }catch (ExecutionException b ) {
             return false;
         }
-
-
     }
 }

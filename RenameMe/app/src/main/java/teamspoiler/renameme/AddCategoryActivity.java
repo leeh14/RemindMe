@@ -2,12 +2,10 @@ package teamspoiler.renameme;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Pair;//will remove
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.concurrent.ExecutionException;//will remove
 
 import teamspoiler.renameme.DataElements.Category;
 import teamspoiler.renameme.DataElements.*;
@@ -45,21 +43,15 @@ public class AddCategoryActivity extends AppCompatActivity {
                 db.addCategory(nc);
 
                 //testing adding the category to the server
+                //String s = serAPI.AddingCat(categoryName);
+                //adding category to server
+                serAPI.AddingCat(categoryName);
 
-                //ac.execute(categoryName).get();
-                //try {
-                String s = serAPI.AddingCat(categoryName);
-                //String s = vali.Authentication(uname,upass);
-                //works everywhere except debug mode
-                String b = "sdf";
-//                }
-//                catch (InterruptedException e )
-//                {
-//                    String s = e.getMessage();
-//                }catch (ExecutionException b ) {
-//                    String sdf = b.getMessage();
-//                }
-
+                //testing the updating category
+//                IterableMap<Category> k = db.getCategories();
+//                for (Category i : k)
+//                    serAPI.UpdatingCat(i.getName());
+                //testing the updating of categories
                 finish();
             }
         });

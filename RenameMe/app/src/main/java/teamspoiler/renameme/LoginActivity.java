@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
                 //accessing the server api singleton
                 ServerAPI Servera = ServerAPI.getInstance(LoginActivity.this);
                 if(Servera.CheckAuthenticate(usernameText, passwordText)){
+                    //Servera.Connect();
                     // move to CategoriesActivity
                     Intent i = new Intent(LoginActivity.this, CategoriesActivity.class);
                     startActivity(i);

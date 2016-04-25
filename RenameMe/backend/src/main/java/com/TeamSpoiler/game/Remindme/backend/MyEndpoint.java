@@ -75,9 +75,9 @@ public class MyEndpoint {
                 //createing the Categories  table
                 //conn.createStatement().execute("CREATE TABLE categories (cat_id INTEGER AUTO_INCREMENT, u_id INTEGER NOT NULL, cat_name VARCHAR(255) NOT NULL, PRIMARY KEY (cat_id,u_id)) ;");
 
-                //conn.createStatement().execute("DROP TABLE item");
+                conn.createStatement().execute("DROP TABLE item");
                 //createing the item  table
-                //conn.createStatement().execute("CREATE TABLE item (item_id INTEGER AUTO_INCREMENT, u_id INTEGER NOT NULL, item_name VARCHAR(255) NOT NULL, cat_id INTEGER NOT NULL, expiration_date DATE NOT NULL, note VARCHAR(255),  PRIMARY KEY (item_id,u_id)) ;");
+                conn.createStatement().execute("CREATE TABLE item (item_id INTEGER AUTO_INCREMENT, u_id INTEGER NOT NULL, item_name VARCHAR(255) NOT NULL, cat_id INTEGER NOT NULL, expiration_date DATETIME NOT NULL, note VARCHAR(255),  PRIMARY KEY (item_id,u_id)) ;");
 
                 //returning framework for true and false
 //                ResultSet result =  conn.createStatement().executeQuery("select case when u.uid = 'hi' then 'true' else 'false' end from users u");

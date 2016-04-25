@@ -251,19 +251,20 @@ public class ServerAPI {
 //        }
 
     }
-    public String AddItem(Item item){
+    public void AddItem(Item item){
         AddingItem addingi = new AddingItem(item);
-        try {
-            String s = addingi.execute( UserID).get();
-            String b = "asdfsad";
-            return s;
-        }
-        catch (InterruptedException e )
-        {
-            return e.getMessage();
-        }catch (ExecutionException b ) {
-            return b.getMessage();
-        }
+        addingi.execute( UserID);
+//        try {
+//            String s = addingi.execute( UserID).get();
+//            String b = "asdfsad";
+//            return s;
+//        }
+//        catch (InterruptedException e )
+//        {
+//            return e.getMessage();
+//        }catch (ExecutionException b ) {
+//            return b.getMessage();
+//        }
         //return "asdf";
     }
 

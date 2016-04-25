@@ -19,7 +19,7 @@ public class AddItemActivity extends AppCompatActivity {
     private DatabaseHelperClass db;
     private int cid;
     private int sMinute, sHour, sDay, sMonth, sYear;
-    private ServerAPI serAPI;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +33,7 @@ public class AddItemActivity extends AppCompatActivity {
             cid = extras.getInt("Category_ID");
         }
         db = DatabaseHelperClass.getInstance(this);
-        serAPI = ServerAPI.getInstance(this);
+
         final Button ChangeDate = (Button) findViewById(R.id.AddItem_ChangeDateButton);
         final Button ChangeTime = (Button) findViewById(R.id.AddItem_ChangeTimeButton);
         final Button Save = (Button) findViewById(R.id.AddItem_SaveButton);
@@ -99,12 +99,9 @@ public class AddItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Item item = new Item(Name.getText().toString(), cid);
-                item.setDate(new LocalDateTime(sYear, sMonth+1, sDay, sHour, sMinute));
+                item.setDate(new LocalDateTime(sYear, sMonth, sDay, sHour, sMinute));
                 item.setNote(Note.getText().toString());
                 db.addItem(item);
-                ItemNotification.notify(AddItemActivity.this, item);
-                //adding item to the server database
-                serAPI.AddItem(item);
                 finish();
             }
         });

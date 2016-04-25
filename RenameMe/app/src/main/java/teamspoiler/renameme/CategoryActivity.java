@@ -8,7 +8,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import teamspoiler.renameme.DataElements.*;
 
@@ -19,6 +23,7 @@ public class CategoryActivity extends AppCompatActivity {
     private IterableMap<Item> items;               // reference to items inside category
     static final int ADD_ITEM_REQUEST = 1;      // The request code
     static final int UPDATE_TIME_REQUEST = 2;  // The request code 2
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +112,7 @@ public class CategoryActivity extends AppCompatActivity {
 
     // set action for category list button
     private void registerClickCallBack() {
+        // category list
         ListView list = (ListView) findViewById(R.id.Cate_ItemsList);
         list.setOnItemClickListener((new AdapterView.OnItemClickListener() {
             @Override
@@ -118,6 +124,89 @@ public class CategoryActivity extends AppCompatActivity {
                 startActivityForResult(i, UPDATE_TIME_REQUEST);
             }
         }));
+
+        // sorting spinner
+        final Spinner spinner = (Spinner) findViewById(R.id.Cate_SortOptions);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.sort_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
+        // set on sorting method selected action
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                String method = spinner.getSelectedItem().toString();
+                sortList(method);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+            }
+        });
+    }
+
+    // sort the list
+    private void sortList(String method){
+
+        List<Item> sortList = items.toList();
+
+        switch(method){
+            case "None":
+                break;
+            case "Alphabetical":
+                insertionSort(sortList, 0);
+                break;
+            case "Closest Expire":
+                insertionSort(sortList, 1);
+                break;
+        }
+
+        if(method != "None") {
+            ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(
+                    this,
+                    R.layout.data_itemslist,
+                    sortList);
+            ListView list = (ListView) findViewById(R.id.Cate_ItemsList);
+            list.setAdapter(adapter);
+        }
+    }
+
+    private List<Item> insertionSort(List<Item> input, int type){
+        Item temp;
+        for (int i = 1; i < input.size(); i++) {
+            for (int j = i; j > 0; j--) {
+                if (compare(input.get(j), input.get(j - 1), type)){
+                    temp = input.get(j);
+                    input.set(j, input.get(j - 1));
+                    input.set(j - 1, temp);
+                }
+            }
+        }
+        return input;
+    }
+
+    private boolean compare(Item i, Item j, int type){
+        switch (type){
+            // Alphabetical
+            case 0:
+                if(i.getName().compareToIgnoreCase(j.getName()) > 0) {
+                    return false;
+                }
+                break;
+            // Closest Expire
+            case 1:
+                if(i.getDate().isAfter(j.getDate())) {
+                    return false;
+                }
+                break;
+        }
+        return true;
     }
 
     @Override

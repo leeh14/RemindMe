@@ -6,7 +6,7 @@
 
 
     <!--Database strings-->
-    <string name="database_name">remind_me.db</string>
+    <string name="database_name">heads_up.db</string>
     <!--Table names-->
     <string name="table_categories">CATEGORIES</string>
     <string name="table_items">ITEMS</string>
@@ -22,5 +22,12 @@
     <!--friends table column names-->
     <string name="friend_username">USERNAME</string>
     <!--table creations-->
+
+    <!--sorting method-->
+    <string-array name="sort_array">
+        <item>None</item>
+        <item>Alphabetical</item>
+        <item>Closest Expire</item>
+    </string-array>
 
 </resources>

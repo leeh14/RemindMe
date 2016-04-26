@@ -73,8 +73,8 @@ tools:context="spoiler.ui.CategoryActivity">
         android:text="Share"
         android:id="@+id/Cate_ShareButton"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@id/Cate_AddItemButton"
-        android:layout_toStartOf="@id/Cate_DeleteButton" />
+        android:layout_toStartOf="@+id/Cate_DeleteButton"
+        android:layout_toEndOf="@+id/Cate_AddItemButton" />
 
     <Button
         android:layout_width="wrap_content"

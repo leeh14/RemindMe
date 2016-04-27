@@ -20,8 +20,8 @@ public class LoginActivity extends AppCompatActivity {
     // initialize
     public void initialize() {
 
-
         final Button submit = (Button) findViewById(R.id.login_SubmitButton);
+        final Button register = (Button) findViewById(R.id.login_RegisterButton);
         final EditText username = (EditText) findViewById(R.id.login_UserNameInput);
         final EditText password = (EditText) findViewById(R.id.login_PasswordInput);
 
@@ -56,15 +56,13 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         }));
-    }
 
-    // check for username and password validity
-    public boolean checkValidity(String un, String pw) {
-        String unAns = "sdd";   // user name answer -> get from server
-        String pwAns = "sdd";   // user name password -> get from server
-        if(unAns.equals(un) && pwAns.equals(pw)) {
-            return true;
-        }
-        return  false;
+        register.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(i);
+            }
+        }));
     }
 }

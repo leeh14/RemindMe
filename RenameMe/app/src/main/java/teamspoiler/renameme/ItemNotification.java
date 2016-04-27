@@ -47,15 +47,17 @@ public class ItemNotification extends Service {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
+    public static void denotify(Context context, Item item) {
+        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(item.getID());
+    }
+
     protected Notification buildNotification(Item item) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.my_selector)
                         .setContentTitle("RemindMe")
                         .setContentText(item.getName() + " at " + item.getDate().toString());
-
-        // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(this,CategoriesActivity.class);
 
         //registerReceiver(stopServiceReceiver, new IntentFilter("notification_stopper"));
         //PendingIntent stopIntent = PendingIntent.getBroadcast(this, 0, new Intent("notification_stopper"), PendingIntent.FLAG_UPDATE_CURRENT);
@@ -66,8 +68,15 @@ public class ItemNotification extends Service {
         // Adds the Intent that starts the Activity to the top of the stack
         //Intent.get
         //stackBuilder.addNextIntent(new Intent(stopServiceReceiver));
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        // Creates an explicit intent for an Activity in your app
+        Intent categoryIntent = new Intent(this, CategoryActivity.class);
+        categoryIntent.putExtra("Category_ID", item.getCategoryID());
+        stackBuilder.addNextIntent(categoryIntent);
+
+        Intent itemIntent = new Intent(this,ItemActivity.class);
+        itemIntent.putExtra("Item_ID", item.getID());
+        stackBuilder.addNextIntent(itemIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mBuilder.setContentIntent(resultPendingIntent);
 
@@ -89,9 +98,8 @@ public class ItemNotification extends Service {
 
         LocalDateTime now = LocalDateTime.now();
         Duration window = new Duration(5*60*1000);
-        if (now.isAfter(item.getDate().minus(window)) && now.isBefore(item.getDate().plus(window)))  {
-                NotificationManager mNotificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (item != null && now.isAfter(item.getDate().minus(window)) && now.isBefore(item.getDate().plus(window)))  {
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.notify(mId, buildNotification(item));
             stopSelf();
             return 1;

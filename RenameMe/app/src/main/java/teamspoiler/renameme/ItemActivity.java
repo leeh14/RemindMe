@@ -33,12 +33,14 @@ public class ItemActivity extends AppCompatActivity {
     private void initialize() {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            cid = extras.getInt("Category_ID");
             iid = extras.getInt("Item_ID");
         }
         db = DatabaseHelperClass.getInstance(this);
-        category = db.getCategory(cid);
         item = db.getItem(iid);
+        cid = item.getCategoryID();
+        category = db.getCategory(cid);
+
+        ItemNotification.denotify(ItemActivity.this, item);
 
         final TextView CategoryTitle = (TextView) findViewById(R.id.Item_Category);
         final TextView ItemName = (TextView) findViewById(R.id.Item_Name);

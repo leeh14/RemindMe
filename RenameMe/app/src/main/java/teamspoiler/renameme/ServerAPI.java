@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.concurrent.ExecutionException;
 
+import teamspoiler.renameme.DataElements.Category;
 import teamspoiler.renameme.DataElements.Item;
 
 /**
@@ -56,6 +57,7 @@ class AddingItem extends AsyncTask< Integer, Void, String> {
     private String expiration;
     private Integer cat_id;
     private String note;
+    private Integer item_id;
     public AddingItem(Item item){
         item_name = item.getName();
         expirationarr = item.getDate().toString().split("T");
@@ -63,6 +65,7 @@ class AddingItem extends AsyncTask< Integer, Void, String> {
         expiration = expirationarr[0].concat(" " +expirationtemp[0]);
         cat_id = item.getCategoryID();
         note = item.getNote();
+        item_id = item.getID();
     }
     @Override
     protected String doInBackground(Integer... params) {
@@ -75,7 +78,47 @@ class AddingItem extends AsyncTask< Integer, Void, String> {
         }
         Integer userId = params[0];
         try {
-            String s =  myApiService.addItem(item_name, expiration, cat_id, userId, note).execute().getData();
+            String s =  myApiService.addItem(item_id,item_name, expiration, cat_id, userId, note).execute().getData();
+            return s;
+            //return  myApiService.connect().execute().getData();
+
+            //return myApiService.sayNO(name).execute().getData();
+//            //return myApiService.sayHi(name).execute().getData();
+        } catch (IOException e) {
+            return e.getMessage();
+        }
+    }
+}
+class UpdatingItem extends AsyncTask< Integer, Void, String> {
+    private static MyApi myApiService = null;
+    private Context context;
+    private String item_name;
+    private String[] expirationarr;
+    private String expiration;
+    private Integer cat_id;
+    private String note;
+    private Integer item_id;
+    public UpdatingItem(Item item){
+        item_name = item.getName();
+        expirationarr = item.getDate().toString().split("T");
+        String [] expirationtemp = expirationarr[1].split("\\.");
+        expiration = expirationarr[0].concat(" " +expirationtemp[0]);
+        cat_id = item.getCategoryID();
+        note = item.getNote();
+        item_id = item.getID();
+    }
+    @Override
+    protected String doInBackground(Integer... params) {
+        if (myApiService == null) {
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
+            // end options for devappserver
+
+            myApiService = builder.build();
+        }
+        Integer userId = params[0];
+        try {
+            String s =  myApiService.updateItem(item_name, expiration, cat_id, userId, note, item_id).execute().getData();
             return s;
             //return  myApiService.connect().execute().getData();
 
@@ -87,12 +130,17 @@ class AddingItem extends AsyncTask< Integer, Void, String> {
     }
 
 }
-class AddingCategory extends AsyncTask<Pair<String,Integer>, Void, String> {
+class AddingCategory extends AsyncTask<Integer, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
-
+    private Integer cat_id;
+    private String cat_name;
+    public AddingCategory(Category cat) {
+        cat_id = cat.getID();
+        cat_name = cat.getName();
+    }
     @Override
-    protected String doInBackground(Pair<String, Integer>... params) {
+    protected String doInBackground(Integer... params) {
         if (myApiService == null) {
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
@@ -100,10 +148,9 @@ class AddingCategory extends AsyncTask<Pair<String,Integer>, Void, String> {
 
             myApiService = builder.build();
         }
-        String cat_name = params[0].first;
-        Integer user = params[0].second;
+        Integer user = params[0];
         try {
-            String s =  myApiService.addCategory(cat_name, user).execute().getData();
+            String s =  myApiService.addCategory(cat_id, cat_name, user).execute().getData();
             return s;
             //return  myApiService.connect().execute().getData();
 
@@ -213,13 +260,13 @@ public class ServerAPI {
         //t.execute(new Pair<Context, String>(context, "Manfred"));
     }
 
-    public void AddingCat(String c_name){
-        addingc = new AddingCategory();
+    public void AddingCat(Category cat){
+        addingc = new AddingCategory(cat);
 
         //try {
             //add .get() to end while testing for quick results
             //String s = addingc.execute(new Pair<String, Integer>(c_name, UserID)).get();
-            addingc.execute(new Pair<String, Integer>(c_name, UserID));
+            addingc.execute(UserID);
             //String s = vali.Authentication(uname,upass);
             //works everywhere except debug mode
             String b = "sdf";
@@ -253,7 +300,8 @@ public class ServerAPI {
     }
     public void AddItem(Item item){
         AddingItem addingi = new AddingItem(item);
-        addingi.execute( UserID);
+        //addingi.execute( UserID);
+
 //        try {
 //            String s = addingi.execute( UserID).get();
 //            String b = "asdfsad";
@@ -266,6 +314,22 @@ public class ServerAPI {
 //            return b.getMessage();
 //        }
         //return "asdf";
+    }
+    public void UpdateItem(Item item)
+    {
+        UpdatingItem updatingi = new UpdatingItem(item);
+        updatingi.execute( UserID);
+//        try {
+//            String s = updatingi.execute( UserID).get();
+//            String b = "asdfsad";
+//            return s;
+//        }
+//        catch (InterruptedException e )
+//        {
+//            return e.getMessage();
+//        }catch (ExecutionException b ) {
+//            return b.getMessage();
+//        }
     }
 
     public boolean CheckAuthenticate(String uname,String upass ){

@@ -167,7 +167,7 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name = "AddCategory")
-    public MyBean AddCategory(@Named("cat_name") String cat_name,@Named("userId") Integer userid ) {
+    public MyBean AddCategory(@Named("cat_id") Integer cat_id , @Named("cat_name") String cat_name,@Named("userId") Integer userid ) {
         MyBean response = new MyBean();
         String url = null;
         response.setData("addCategory");
@@ -183,7 +183,7 @@ public class MyEndpoint {
             Connection conn = DriverManager.getConnection(url);
             try {
                 response.setData("Adding");
-                conn.createStatement().execute("INSERT INTO categories(u_id, cat_name) VALUES('" + userid + " ','" + cat_name + "')");
+                conn.createStatement().execute("INSERT INTO categories(cat_id,u_id, cat_name) VALUES( '" + cat_id + "','" + userid + " ','" + cat_name + "')");
             }finally {
                 conn.close();
             }
@@ -193,7 +193,7 @@ public class MyEndpoint {
         return response;
     }
     @ApiMethod(name = "AddItem")
-    public MyBean AddItem(@Named("item_name") String item_name,@Named("expiration") String expire, @Named("cat_id") Integer cat_id,@Named("userId") Integer userid, @Named("note") String note ) {
+    public MyBean AddItem(@Named("item_id") Integer item_id,@Named("item_name") String item_name,@Named("expiration") String expire, @Named("cat_id") Integer cat_id,@Named("userId") Integer userid, @Named("note") String note ) {
         MyBean response = new MyBean();
         String url = null;
         response.setData("addItem");
@@ -209,7 +209,40 @@ public class MyEndpoint {
             Connection conn = DriverManager.getConnection(url);
             try {
                 response.setData("Adding");
-                conn.createStatement().execute("INSERT INTO item(u_id, item_name,cat_id, expiration_date, note) VALUES('" + userid + " ','" + item_name + "','" + cat_id + "',STR_TO_DATE('" + expire + "','%Y-%m-%d %h:%i:%s'),'" + note + "')" );
+                conn.createStatement().execute("INSERT INTO item(item_id,u_id, item_name,cat_id, expiration_date, note) VALUES('" + item_id + "','" + userid + " ','" + item_name + "','" + cat_id + "',STR_TO_DATE('" + expire + "','%Y-%m-%d %h:%i:%s'),'" + note + "')" );
+            }finally {
+                conn.close();
+            }
+        }catch(SQLException e){
+            response.setData(e.toString());
+        }
+        return response;
+    }
+    @ApiMethod(name = "UpdateItem")
+    public MyBean UpdateItem(@Named("item_name") String item_name,@Named("expiration") String expire, @Named("cat_id") Integer cat_id,@Named("userId") Integer userid, @Named("note") String note , @Named("item_id") Integer item_id) {
+        MyBean response = new MyBean();
+        String url = null;
+        response.setData("addItem");
+        try {
+            if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+                Class.forName("com.mysql.jdbc.GoogleDriver");
+                url = "jdbc:google:mysql://headsup-1260:headsup/Users?user=root";
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            Connection conn = DriverManager.getConnection(url);
+            try {
+
+                Statement statetype = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                ResultSet result =  statetype.executeQuery("SELECT i.item_name,i.cat_id, i.expiration_date, i.note,item_id, u_id FROM item i WHERE i.u_id ='" + userid + "'AND item_id = '" + item_id + "';");
+                result.absolute(1);
+                result.updateString("item_name", item_name);
+                result.updateInt("cat_id", cat_id);
+                result.updateString("expiration_date", expire);
+                result.updateString("note", note);
+                result.updateRow();
             }finally {
                 conn.close();
             }

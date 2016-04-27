@@ -45,12 +45,18 @@ public class AddCategoryActivity extends AppCompatActivity {
                 //testing adding the category to the server
                 //String s = serAPI.AddingCat(categoryName);
                 //adding category to server
-                serAPI.AddingCat(categoryName);
+                serAPI.AddingCat(nc);
 
                 //testing the updating category
-//                IterableMap<Category> k = db.getCategories();
-//                for (Category i : k)
-//                    serAPI.UpdatingCat(i.getName());
+//                IterableMap<Item> k = db.getItems();
+//                for (Item i : k)
+//                    if(i.getName().equals("Guth"))
+//                    {
+//                        i.setName("Not Guth");
+//                        i.setNote("ther is something");
+//                        serAPI.UpdateItem(i);
+//                    }
+                    //serAPI.UpdatingCat(i.getName());
                 //testing the updating of categories
                 finish();
             }

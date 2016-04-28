@@ -39,7 +39,7 @@ public class EditItemActivity extends AppCompatActivity {
     private void initialize(){
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            iid = extras.getInt("Item_ID");
+            iid = extras.getInt(getString(R.string.extra_item_id));
         }
         db = DatabaseHelperClass.getInstance(this);
         item = db.getItem(iid);

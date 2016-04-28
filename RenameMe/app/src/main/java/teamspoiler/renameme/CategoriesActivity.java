@@ -86,7 +86,7 @@ public class CategoriesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
                 Category c = (Category) parent.getAdapter().getItem(position);
                 Intent i = new Intent(CategoriesActivity.this, CategoryActivity.class);
-                i.putExtra("Category_ID", c.getID());
+                i.putExtra(getString(R.string.extra_category_id), c.getID());
                 startActivityForResult(i, MERGE_CATEGORY_REQUEST);
             }
         }));

@@ -34,7 +34,7 @@ public class ItemActivity extends AppCompatActivity {
     private void initialize() {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            iid = extras.getInt("Item_ID");
+            iid = extras.getInt(getString(R.string.extra_item_id));
         }
         db = DatabaseHelperClass.getInstance(this);
         serAPI = ServerAPI.getInstance(this);
@@ -71,7 +71,7 @@ public class ItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent EditItemIntent = new Intent(v.getContext(), EditItemActivity.class);
-                EditItemIntent.putExtra("Item_ID", iid);
+                EditItemIntent.putExtra(getString(R.string.extra_item_id), iid);
                 startActivityForResult(EditItemIntent, EDIT_ITEM_REQUEST);
             }
         }));
@@ -81,7 +81,7 @@ public class ItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent ShareItemIntent = new Intent(v.getContext(), ShareItemActivity.class);
-                ShareItemIntent.putExtra("Item_ID", iid);
+                ShareItemIntent.putExtra(getString(R.string.extra_item_id), iid);
                 startActivity(ShareItemIntent);
             }
         }));

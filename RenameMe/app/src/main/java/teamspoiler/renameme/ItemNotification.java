@@ -25,11 +25,15 @@ import teamspoiler.renameme.DataElements.*;
 public class ItemNotification extends Service {
     DatabaseHelperClass db;
 
+    //The maximum duration of time (in milliseconds) that the notification can
+    //be offset from the item's expiration date.
+    public final int DURATION_WINDOW = 5*60*1000;
+
     // Use this method to create an Alarm that goes off at the given time and
     //sets off the ItemNotification Service. Call it whenever an item is added or modified
     public static void notify(Context context, Item item) {
         Intent myIntent = new Intent(context, ItemNotification.class);
-        myIntent.putExtra("Item_ID", item.getID());
+        myIntent.putExtra(context.getString(R.string.extra_item_id), item.getID());
 
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getService(context, 0, myIntent, 0);
@@ -62,11 +66,11 @@ public class ItemNotification extends Service {
 
         // Creates an explicit intent for an Activity in your app
         Intent categoryIntent = new Intent(this, CategoryActivity.class);
-        categoryIntent.putExtra("Category_ID", item.getCategoryID());
+        categoryIntent.putExtra(getString(R.string.extra_category_id), item.getCategoryID());
         stackBuilder.addNextIntent(categoryIntent);
 
         Intent itemIntent = new Intent(this,ItemActivity.class);
-        itemIntent.putExtra("Item_ID", item.getID());
+        itemIntent.putExtra(getString(R.string.extra_item_id), item.getID());
         stackBuilder.addNextIntent(itemIntent);
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -84,11 +88,11 @@ public class ItemNotification extends Service {
     //Creates a corresponding notification if it the current time correpsonds to item's expiration date.
     @Override
     public int onStartCommand(Intent intent, int flags, int startID) {
-        int mId = intent.getExtras().getInt("Item_ID");
+        int mId = intent.getExtras().getInt(getString(R.string.extra_item_id));
         Item item = db.getItem(mId);
 
         LocalDateTime now = LocalDateTime.now();
-        Duration window = new Duration(5*60*1000);
+        Duration window = new Duration(DURATION_WINDOW);
         if (item != null && now.isAfter(item.getDate().minus(window)) && now.isBefore(item.getDate().plus(window)))  {
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             // mId allows you to update the notification later on by creating or cancelling a notification with the same ID.

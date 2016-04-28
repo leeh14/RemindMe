@@ -40,7 +40,7 @@ public class CategoryActivity extends AppCompatActivity {
     private void initialize() {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            cid = extras.getInt("Category_ID");
+            cid = extras.getInt(getString(R.string.extra_category_id));
         }
         db = DatabaseHelperClass.getInstance(this);
         serAPI = ServerAPI.getInstance(this);
@@ -90,7 +90,7 @@ public class CategoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent AddItemIntent = new Intent(v.getContext(), AddItemActivity.class);
-                AddItemIntent.putExtra("Category_ID", cid);
+                AddItemIntent.putExtra(getString(R.string.extra_category_id), cid);
                 startActivityForResult(AddItemIntent, ADD_ITEM_REQUEST);
             }
         }));
@@ -234,8 +234,8 @@ public class CategoryActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
                 Item it = (Item) parent.getAdapter().getItem(position);
                 Intent i = new Intent(CategoryActivity.this, ItemActivity.class);
-                i.putExtra("Category_ID", cid);
-                i.putExtra("Item_ID", it.getID());
+                i.putExtra(getString(R.string.extra_category_id), cid);
+                i.putExtra(getString(R.string.extra_item_id), it.getID());
                 startActivityForResult(i, UPDATE_TIME_REQUEST);
             }
         }));

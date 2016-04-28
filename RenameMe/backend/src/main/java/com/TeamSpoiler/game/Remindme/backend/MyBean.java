@@ -17,23 +17,11 @@ public class MyBean {
         myData = data;
     }
 
-    //category storage
-    private List CategoryNames = new ArrayList();
-
-    public void AddCategories(String name ){CategoryNames.add(name);}
-
-    public List getCategories(){return  CategoryNames;}
-
-    //item storage
-    private List ItemNames = new ArrayList();
-
-    public void AddItems(String name) {ItemNames.add(name);}
-
-    public List getItems(){return  ItemNames;}
 
     //the current user id
     private Integer user_id;
 
     public void setID(Integer id) {user_id = id;}
 
+    public Integer getUser_id(){return user_id;}
 }

@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class RegisterActivity extends AppCompatActivity {
-
+    private ServerAPI serAPI;                       //reference to server api class
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
         final EditText password = (EditText) findViewById(R.id.Register_PasswordInput);
         final Button confirm = (Button) findViewById(R.id.Register_ConfirmButton);
         final Button cancel = (Button) findViewById(R.id.Register_CancelButton);
-
+        serAPI = ServerAPI.getInstance(this);
         confirm.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 }else{
                     //TO-DO pass data to register function on server
+                    serAPI.AddingUser(usernameText.trim(),passwordText.trim());
                     finish();
                 }
             }

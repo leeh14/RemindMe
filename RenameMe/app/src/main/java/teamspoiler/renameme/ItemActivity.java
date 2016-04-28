@@ -18,6 +18,7 @@ public class ItemActivity extends AppCompatActivity {
     private DatabaseHelperClass db;      // reference to the database class
     private int iid, cid;               // item id and category id
     private Category category;          // the category object
+    private ServerAPI serAPI;                       //reference to server api class
     private Item item;                  // the item object
     final Context context = this;                  // context of this activity
 
@@ -36,6 +37,7 @@ public class ItemActivity extends AppCompatActivity {
             iid = extras.getInt("Item_ID");
         }
         db = DatabaseHelperClass.getInstance(this);
+        serAPI = ServerAPI.getInstance(this);
         item = db.getItem(iid);
         cid = item.getCategoryID();
         category = db.getCategory(cid);
@@ -101,6 +103,7 @@ public class ItemActivity extends AppCompatActivity {
                         .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 db.deleteItem(item.getID());
+                                serAPI.DeleteItem(item.getID());
                                 finish();
                             }
                         })

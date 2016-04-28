@@ -21,6 +21,7 @@ import teamspoiler.renameme.DataElements.*;
 
 public class CategoryActivity extends AppCompatActivity {
     private DatabaseHelperClass db;                 // reference to database helper class
+    private ServerAPI serAPI;                       //reference to server api class
     static int cid;                                 // id of the category
     private Category category;                     // reference to category itself
     private IterableMap<Item> items;               // reference to items inside category
@@ -42,6 +43,7 @@ public class CategoryActivity extends AppCompatActivity {
             cid = extras.getInt("Category_ID");
         }
         db = DatabaseHelperClass.getInstance(this);
+        serAPI = ServerAPI.getInstance(this);
         category = db.getCategory(cid);
         items = db.getItems(cid);
 
@@ -119,6 +121,7 @@ public class CategoryActivity extends AppCompatActivity {
                         .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 db.deleteCategory(category.getID());
+                                serAPI.DeleteingCat(category.getID());
                                 finish();
                             }
                         })

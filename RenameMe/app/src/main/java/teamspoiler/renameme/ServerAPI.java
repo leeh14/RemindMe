@@ -16,6 +16,7 @@ import java.sql.Date;
 import java.util.concurrent.ExecutionException;
 
 import teamspoiler.renameme.DataElements.Category;
+import teamspoiler.renameme.DataElements.Friend;
 import teamspoiler.renameme.DataElements.Item;
 
 /**
@@ -44,6 +45,60 @@ class Authenticate extends AsyncTask<Pair<String,String>, Void, Pair<String, Int
             return new Pair<String, Integer>(s,d );
         } catch (IOException e) {
             return new Pair<String, Integer>(e.getMessage(), -1);
+        }
+    }
+}
+//Asynchronous task to add an User
+class AddingUser extends AsyncTask< Pair<String , String>, Void, String> {
+    private static MyApi myApiService = null;
+    private Context context;
+    @Override
+    protected String doInBackground(Pair<String, String>... params) {
+        if (myApiService == null) {
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
+            // end options for devappserver
+
+            myApiService = builder.build();
+        }
+        //set the stored user id
+        String username = params[0].first;
+        String password = params[0].second;
+        try {
+            return   myApiService.addUser(username, password).execute().getData();
+
+        } catch (IOException e) {
+            return e.getMessage();
+        }
+    }
+}
+//Asynchronous task to add a Friend
+class AddingFriend extends AsyncTask<Integer, Void, String> {
+    private static MyApi myApiService = null;
+    private Context context;
+    private String friend_username;
+    private String friend_name;
+    public AddingFriend(Friend f){
+        friend_name = f.getName().trim();
+        friend_username = f.getUsername().trim();
+    }
+
+    @Override
+    protected String doInBackground(Integer... params) {
+        if (myApiService == null) {
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
+            // end options for devappserver
+
+            myApiService = builder.build();
+        }
+        //set the stored user id
+        Integer user_id = params[0];
+        try {
+            return   myApiService.addFriend(friend_name, friend_username, user_id).execute().getData();
+
+        } catch (IOException e) {
+            return e.getMessage();
         }
     }
 }
@@ -81,7 +136,7 @@ class AddingItem extends AsyncTask< Integer, Void, String> {
         //set the stored user id
         Integer userId = params[0];
         try {
-            return   myApiService.addItem(item_id,item_name, expiration, cat_id, userId, note).execute().getData();
+            return   myApiService.addItem(item_id, item_name, expiration, cat_id, userId, note).execute().getData();
 
         } catch (IOException e) {
             return e.getMessage();
@@ -127,6 +182,29 @@ class UpdatingItem extends AsyncTask< Integer, Void, String> {
         }
     }
 
+}
+//Asynchronous task to delete an item
+class DeletingItem extends AsyncTask< Integer, Void, String> {
+    private static MyApi myApiService = null;
+    private Context context;
+    @Override
+    protected String doInBackground(Integer... params) {
+        if (myApiService == null) {
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
+            // end options for devappserver
+
+            myApiService = builder.build();
+        }
+        //set the stored user id
+        Integer item_id = params[0];
+        try {
+            return   myApiService.deleteItem(item_id).execute().getData();
+
+        } catch (IOException e) {
+            return e.getMessage();
+        }
+    }
 }
 //Asynchronous task to adding a category
 class AddingCategory extends AsyncTask<Integer, Void, String> {
@@ -180,6 +258,29 @@ class UpdatingCategory extends AsyncTask<Pair<String,Integer>, Void, String> {
     }
 
 }
+//Asynchronous task to delete a category
+class DeleteingCategory extends AsyncTask< Integer, Void, String> {
+    private static MyApi myApiService = null;
+    private Context context;
+    @Override
+    protected String doInBackground(Integer... params) {
+        if (myApiService == null) {
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
+            // end options for devappserver
+
+            myApiService = builder.build();
+        }
+        //set the stored user id
+        Integer cat_id = params[0];
+        try {
+            return   myApiService.deleteCategory(cat_id).execute().getData();
+
+        } catch (IOException e) {
+            return e.getMessage();
+        }
+    }
+}
 //This class is more of a debugging class as of right now
 //used for rapid responses/ modifying the framework of the database
 class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
@@ -215,9 +316,7 @@ public class ServerAPI {
     private static ServerAPI sInstance;
     private Context context;                //used as the context for outputting if needed
     public Integer UserID;                  //the userid that the user holds
-    private Authenticate auth;              //Authetication class to help autheticate the user
-    private AddingCategory addingc;         //Adding category class to help add categories for the user
-    private UpdatingCategory updatingc;     //Updating category class to help update categories on the server
+
     private ServerAPI(Context context) {
         this.context = context;
     }
@@ -235,14 +334,20 @@ public class ServerAPI {
         //t.execute(new Pair<Context, String>(context, "Manfred"));
     }
 
+
+    //Starts the asynchronus task of adding a category
+    public void AddingUser(String username , String password){
+        AddingUser adduser = new AddingUser();
+        adduser.execute(new Pair<String, String>(username,password));
+    }
     //Starts the asynchronus task of adding a category
     public void AddingCat(Category cat){
-        addingc = new AddingCategory(cat);
+        AddingCategory addingc = new AddingCategory(cat);
         addingc.execute(UserID);
     }
     //Starts the asynchronus task of updating a category
     public void UpdatingCat(String c_name){
-        updatingc = new UpdatingCategory();
+        UpdatingCategory updatingc = new UpdatingCategory();
         updatingc.execute(new Pair<String, Integer>(c_name, UserID));
         //used for debbugging purposes to grab a string output
 //        try {
@@ -260,6 +365,11 @@ public class ServerAPI {
 //        }
 
     }
+    //Starts the asynchronus task of deleting a category
+    public void DeleteingCat(Integer cat_id){
+        DeleteingCategory deletingc = new DeleteingCategory();
+        deletingc.execute(cat_id);
+    }
     //Starts the asynchronus task of updating an item
     public void AddItem(Item item){
         AddingItem addingi = new AddingItem(item);
@@ -271,10 +381,21 @@ public class ServerAPI {
         UpdatingItem updatingi = new UpdatingItem(item);
         updatingi.execute( UserID);
     }
+    //Starts the asynchronus task of deleting an item
+    public void DeleteItem(Integer item_id)
+    {
+        DeletingItem deletingi = new DeletingItem();
+        deletingi.execute(item_id);
+    }
+    //Starts the asynchronus task of adding a category
+    public void AddingFriend(Friend friend){
+        AddingFriend addingf = new AddingFriend(friend);
+        addingf.execute(UserID);
+    }
     //Boolean function that returns true id the username and password exist
     //Then it stores the user id for the singleton
     public boolean CheckAuthenticate(String uname,String upass ){
-        auth = new Authenticate();
+        Authenticate auth = new Authenticate();
         try {
             //starts asychronus task to make sure user is valid
             Pair<String, Integer> s = auth.execute(new Pair<String, String>(uname, upass)).get();

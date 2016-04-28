@@ -56,6 +56,7 @@ public class CategoryActivity extends AppCompatActivity {
         final Button AddItem = (Button) findViewById(R.id.Cate_AddItemButton);
         final Button Share = (Button) findViewById(R.id. Cate_ShareButton);
         final Button Delete = (Button) findViewById(R.id.Cate_DeleteButton);
+        final Button Merge = (Button) findViewById(R.id.Cate_MergeButton);
 
         // set action for categories button at top
         Categories.setOnClickListener((new View.OnClickListener() {
@@ -106,7 +107,6 @@ public class CategoryActivity extends AppCompatActivity {
         Delete.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         context);
 
@@ -139,6 +139,77 @@ public class CategoryActivity extends AppCompatActivity {
                 alertDialog.show();
             }
         }));
+
+        Merge.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(CategoryActivity.this);
+                builderSingle.setTitle("Select One Category to merge with:");
+
+                final ArrayAdapter<Category> arrayAdapter = new ArrayAdapter<Category>(
+                        CategoryActivity.this,
+                        android.R.layout.simple_list_item_1,
+                        db.getCategories().toList());
+
+                builderSingle.setNegativeButton(
+                        "cancel",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                builderSingle.setAdapter(
+                        arrayAdapter,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String strName = arrayAdapter.getItem(which).getName();
+                                AlertDialog.Builder builderInner = new AlertDialog.Builder(
+                                        CategoryActivity.this);
+                                builderInner.setMessage(strName);
+                                if (arrayAdapter.getItem(which).getID() != category.getID()) {
+                                    builderInner.setTitle("Do you want to merge with: ");
+                                    builderInner.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(
+                                                DialogInterface dialog,
+                                                int which) {
+                                            // TO-DO MERGE CATEGORYYYYY
+                                            // category 1 = category variable above
+                                            // category 2 = arrayAdapter.getItem(which)
+
+                                            finish();
+                                        }
+                                    })
+                                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                public void onClick(
+                                                        DialogInterface dialog,
+                                                        int which) {
+                                                    // close the dialog
+                                                    dialog.cancel();
+                                                }
+                                            });
+                                    builderInner.show();
+                                }else{
+                                    builderInner.setTitle("You selected current category");
+                                    builderInner.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(
+                                                DialogInterface dialog,
+                                                int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    builderInner.show();
+                                }
+                            }
+                        });
+                builderSingle.show();
+            }
+        }));
+
 
         populateItemsList();
         registerClickCallBack();

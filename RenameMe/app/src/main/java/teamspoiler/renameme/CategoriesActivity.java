@@ -13,9 +13,10 @@ import teamspoiler.renameme.DataElements.*;
 
 public class CategoriesActivity extends AppCompatActivity {
 
-    private DatabaseHelperClass db;                  // reference to database helper class
-    private IterableMap<Category>  categories;     // categories data class
-    static final int ADD_CATEGORY_REQUEST = 1;  // The request code
+    private DatabaseHelperClass db;                     // reference to database helper class
+    private IterableMap<Category>  categories;         // categories data class
+    static final int ADD_CATEGORY_REQUEST = 1;      // The request code
+    static final int MERGE_CATEGORY_REQUEST = 2;    // Th request code
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +87,7 @@ public class CategoriesActivity extends AppCompatActivity {
                 Category c = (Category) parent.getAdapter().getItem(position);
                 Intent i = new Intent(CategoriesActivity.this, CategoryActivity.class);
                 i.putExtra("Category_ID", c.getID());
-                startActivity(i);
+                startActivityForResult(i, MERGE_CATEGORY_REQUEST);
             }
         }));
     }
@@ -94,7 +95,7 @@ public class CategoriesActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // refresh the activity
-        if (requestCode == ADD_CATEGORY_REQUEST) {
+        if (requestCode == ADD_CATEGORY_REQUEST || requestCode == MERGE_CATEGORY_REQUEST) {
             finish();
             startActivity(getIntent());
         }

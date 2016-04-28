@@ -136,7 +136,7 @@ class AddingItem extends AsyncTask< Integer, Void, String> {
         //set the stored user id
         Integer userId = params[0];
         try {
-            return   myApiService.addItem(item_id, item_name, expiration, cat_id, userId, note).execute().getData();
+            return myApiService.addItem(item_id, item_name, expiration, cat_id, userId, note).execute().getData();
 
         } catch (IOException e) {
             return e.getMessage();

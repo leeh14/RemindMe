@@ -1,5 +1,8 @@
 package teamspoiler.renameme;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +18,8 @@ public class FriendsActivity extends AppCompatActivity {
     DatabaseHelperClass db;
     IterableMap<Friend> friends;
     static final int ADD_FRIEND_REQUEST = 1;  // The request code
+    final Context context = this;                  // context of this activity
+    ArrayAdapter<Friend> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +63,12 @@ public class FriendsActivity extends AppCompatActivity {
             }
         }));
         populateItemsList();
-        //registerClickCallBack();
+        registerClickCallBack();
     }
 
     // populate the category list with category button
     private void populateItemsList() {
-        ArrayAdapter<Friend> adapter = new ArrayAdapter<Friend>(
+        adapter = new ArrayAdapter<Friend>(
                 this,
                 R.layout.data_sharelist,
                 friends.toList());
@@ -78,6 +83,68 @@ public class FriendsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
 
+                final Friend friend = (Friend) parent.getAdapter().getItem(position);
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        context);
+
+                final String fName = friend.getName();
+                final String fuName = friend.getUsername();
+
+                // set title
+                alertDialogBuilder.setTitle("Friend");
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("username: " + fuName +
+                                "\nname: " + fName)
+                        .setCancelable(false)
+                        .setPositiveButton("Delete",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                AlertDialog.Builder alertDialogBuilder2 = new AlertDialog.Builder(
+                                        context);
+
+                                // set title
+
+                                alertDialogBuilder2.setTitle("Delete friend");
+
+                                // set dialog message
+                                alertDialogBuilder2
+                                        .setMessage("Do you want to delete " + fName + " ?")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,int id) {
+                                                db.deleteFriend(friend.getID());
+                                                finish();
+                                                startActivity(getIntent());
+                                            }
+                                        })
+                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                // close the dialog
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                                // create alert dialog
+                                AlertDialog alertDialog2 = alertDialogBuilder2.create();
+
+                                // show it
+                                alertDialog2.show();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // close the dialog
+                                dialog.cancel();
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
             }
         }));
     }

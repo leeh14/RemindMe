@@ -87,6 +87,7 @@ public class ShareCategoryActivity extends AppCompatActivity {
                 // set title
                 String cName = category.getName();
                 String fName = friend.getName();
+
                 alertDialogBuilder.setTitle("Share with friend");
 
                 // set dialog message

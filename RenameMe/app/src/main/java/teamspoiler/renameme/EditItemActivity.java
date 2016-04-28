@@ -119,7 +119,7 @@ public class EditItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 item.setName(Name.getText().toString());
-                item.setDate(new LocalDateTime(sYear, sMonth+1, sDay, sHour, sMinute));
+                item.setDate(new LocalDateTime(sYear, sMonth, sDay, sHour, sMinute));
                 item.setNote(Note.getText().toString());
                 db.updateItem(item);
                 ServApi.UpdateItem(item);

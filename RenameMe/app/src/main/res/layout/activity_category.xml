@@ -15,8 +15,9 @@ tools:context="spoiler.ui.CategoryActivity">
     android:text="Categories"
     android:id="@+id/Cate_CategoriesButton"
     android:layout_alignParentTop="true"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true" />
+    android:layout_alignParentStart="true"
+    android:enabled="false"
+    android:clickable="false" />
 
 <Button
     android:layout_width="120sp"
@@ -24,7 +25,8 @@ tools:context="spoiler.ui.CategoryActivity">
     android:text="Friends"
     android:id="@+id/Cate_FriendsButton"
     android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true" />
+    android:layout_toEndOf="@+id/Cate_CategoriesButton"
+    android:layout_toStartOf="@+id/Cate_SettingsButton" />
 
 <Button
     android:layout_width="120sp"
@@ -32,8 +34,7 @@ tools:context="spoiler.ui.CategoryActivity">
     android:text="Settings"
     android:id="@+id/Cate_SettingsButton"
     android:layout_alignParentTop="true"
-    android:layout_toRightOf="@+id/Cate_FriendsButton"
-    android:layout_toEndOf="@+id/Cate_FriendsButton" />
+    android:layout_alignParentEnd="true" />
 
 <TextView
     android:layout_width="wrap_content"

@@ -32,21 +32,7 @@ import sun.util.calendar.LocalGregorianCalendar;
   )
 )
 public class MyEndpoint {
-    //MyBean response = new MyBean();
-    /** A simple endpoint method that takes a name and says Hi back */
-    @ApiMethod(name = "sayHi")
-    public MyBean sayHi(@Named("name") String name) {
-        MyBean response = new MyBean();
-        response.setData("Hidasd, " + name);
-
-        return response;
-    }
-    @ApiMethod(name = "sayNO")
-    public MyBean sayNO(@Named("name") String name){
-        MyBean response = new MyBean();
-        response.setData("craep sdf " + name);
-        return response;
-    }
+    //connection function used for quick testing will be removed in the end
     @ApiMethod(name = "Connect")
     public MyBean Connect() {
         MyBean response = new MyBean();
@@ -100,7 +86,7 @@ public class MyEndpoint {
         }
         return response;
     }
-
+    //Authentication method
     @ApiMethod(name = "Authenticate")
     public MyBean Authenticate(@Named("uname") String u_name, @Named ("upass") String u_pass) {
         MyBean response = new MyBean();
@@ -118,11 +104,10 @@ public class MyEndpoint {
             Connection conn = DriverManager.getConnection(url);
             try {
                 ResultSet result =  conn.createStatement().executeQuery("select case when u.username = '"+u_name+ "' and u.password = '"+ u_pass+"'   then 'true' else 'false' end, u.u_id from users u");
-                //response.setData(result.getString(2));
+                //grab the user id on the server and whether or not username password exist
                 while(result.next()) {
                     response.setData(result.getString(1));
                     response.setID(result.getInt(2));
-                    //Log.W("Data", result.getString(2) );
                 }
             }finally {
                 conn.close();
@@ -132,6 +117,8 @@ public class MyEndpoint {
         }
         return response;
     }
+    //Method to help update the category
+    //Method is used to help make sure that the server has the same categories as the phone
     @ApiMethod(name = "UpdateCategory")
     public MyBean UpdateCategory(@Named("cat_named") String cat_name, @Named ("userId") Integer userid){
         MyBean response = new MyBean();
@@ -149,12 +136,8 @@ public class MyEndpoint {
             Connection conn = DriverManager.getConnection(url);
             try {
                 ResultSet result =  conn.createStatement().executeQuery("SELECT c.cat_id FROM categories c  WHERE c.cat_id = '" +cat_name+"' AND c.u_id = '"+ userid+"'; ");
-//                response.setData(result.getString(1));
-//                //if empty add the item
-//                String cat = response.getData();
-                //no results turn backso it doesn't exist
+                //if not already included insert the new category
                 if(!result.isBeforeFirst()){
-                    response.setData("Adding");
                     conn.createStatement().execute("INSERT INTO categories(u_id, cat_name) VALUES('"+userid +" ','"+cat_name + "')");
                 }
             }finally {
@@ -165,7 +148,7 @@ public class MyEndpoint {
         }
         return response;
     }
-
+    //Adding a category into the database
     @ApiMethod(name = "AddCategory")
     public MyBean AddCategory(@Named("cat_id") Integer cat_id , @Named("cat_name") String cat_name,@Named("userId") Integer userid ) {
         MyBean response = new MyBean();
@@ -182,7 +165,9 @@ public class MyEndpoint {
         try{
             Connection conn = DriverManager.getConnection(url);
             try {
+                //response set to determine whether or not the function called work
                 response.setData("Adding");
+                //MYSQL statement to insert a new category with the corresponding category id, user id, and the name of category
                 conn.createStatement().execute("INSERT INTO categories(cat_id,u_id, cat_name) VALUES( '" + cat_id + "','" + userid + " ','" + cat_name + "')");
             }finally {
                 conn.close();
@@ -192,6 +177,7 @@ public class MyEndpoint {
         }
         return response;
     }
+    //Adding an item to the server database
     @ApiMethod(name = "AddItem")
     public MyBean AddItem(@Named("item_id") Integer item_id,@Named("item_name") String item_name,@Named("expiration") String expire, @Named("cat_id") Integer cat_id,@Named("userId") Integer userid, @Named("note") String note ) {
         MyBean response = new MyBean();
@@ -208,7 +194,9 @@ public class MyEndpoint {
         try{
             Connection conn = DriverManager.getConnection(url);
             try {
+                //message to hold and return if there are any errors
                 response.setData("Adding");
+                //MYSQL insert statement
                 conn.createStatement().execute("INSERT INTO item(item_id,u_id, item_name,cat_id, expiration_date, note) VALUES('" + item_id + "','" + userid + " ','" + item_name + "','" + cat_id + "',STR_TO_DATE('" + expire + "','%Y-%m-%d %h:%i:%s'),'" + note + "')" );
             }finally {
                 conn.close();
@@ -218,6 +206,7 @@ public class MyEndpoint {
         }
         return response;
     }
+    //Updating an item with new infomation
     @ApiMethod(name = "UpdateItem")
     public MyBean UpdateItem(@Named("item_name") String item_name,@Named("expiration") String expire, @Named("cat_id") Integer cat_id,@Named("userId") Integer userid, @Named("note") String note , @Named("item_id") Integer item_id) {
         MyBean response = new MyBean();
@@ -234,15 +223,43 @@ public class MyEndpoint {
         try{
             Connection conn = DriverManager.getConnection(url);
             try {
-
+                //setting the result type allowing the program to modify the database
                 Statement statetype = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
                 ResultSet result =  statetype.executeQuery("SELECT i.item_name,i.cat_id, i.expiration_date, i.note,item_id, u_id FROM item i WHERE i.u_id ='" + userid + "'AND item_id = '" + item_id + "';");
+                //the absolute is used to select the 1 and only row and tell the update row to update this row
                 result.absolute(1);
+                //Updating the item values with the newly added information
                 result.updateString("item_name", item_name);
                 result.updateInt("cat_id", cat_id);
                 result.updateString("expiration_date", expire);
                 result.updateString("note", note);
                 result.updateRow();
+            }finally {
+                conn.close();
+            }
+        }catch(SQLException e){
+            response.setData(e.toString());
+        }
+        return response;
+    }
+    //Method to create new users
+    @ApiMethod(name = "AddUser")
+    public MyBean AddUser(@Named("username") String user_name,@Named("password") String password) {
+        MyBean response = new MyBean();
+        String url = null;
+        response.setData("addItem");
+        try {
+            if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+                Class.forName("com.mysql.jdbc.GoogleDriver");
+                url = "jdbc:google:mysql://headsup-1260:headsup/Users?user=root";
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            Connection conn = DriverManager.getConnection(url);
+            try {
+                conn.createStatement().execute("INSERT INTO users(username, password) VALUES('"+ user_name+ "','" + password+"')");
             }finally {
                 conn.close();
             }

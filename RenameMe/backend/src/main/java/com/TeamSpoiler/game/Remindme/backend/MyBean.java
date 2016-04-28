@@ -17,8 +17,6 @@ public class MyBean {
         myData = data;
     }
 
-    //returning authentication
-//    public Pair<String, Integer> getVerification(){return new Pair<String, Integer>(myData, user_id);}
     //category storage
     private List CategoryNames = new ArrayList();
 
@@ -38,5 +36,4 @@ public class MyBean {
 
     public void setID(Integer id) {user_id = id;}
 
-    public Integer getUser_id(){return user_id;}
 }

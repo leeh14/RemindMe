@@ -19,8 +19,9 @@ import teamspoiler.renameme.DataElements.Category;
 import teamspoiler.renameme.DataElements.Item;
 
 /**
- * Created by Elric on 4/24/2016.
+ * Created by Hayden on 4/24/2016.
  */
+//Asynchronous task to authenticate a user
 class Authenticate extends AsyncTask<Pair<String,String>, Void, Pair<String, Integer>> {
     private static MyApi myApiService = null;
     private Context context;
@@ -37,18 +38,16 @@ class Authenticate extends AsyncTask<Pair<String,String>, Void, Pair<String, Int
         String uname = params[0].first;
         String upass = params[0].second;
         try {
+            //grab the response from backend and get the current user's id
             String s =  myApiService.authenticate(uname, upass).execute().getData();
             Integer d = myApiService.authenticate(uname, upass).execute().getUserId();
             return new Pair<String, Integer>(s,d );
-            //return  myApiService.connect().execute().getData();
-
-            //return myApiService.sayNO(name).execute().getData();
-            //return myApiService.sayHi(name).execute().getData();
         } catch (IOException e) {
             return new Pair<String, Integer>(e.getMessage(), -1);
         }
     }
 }
+//Asynchronous task to add an item
 class AddingItem extends AsyncTask< Integer, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
@@ -58,10 +57,13 @@ class AddingItem extends AsyncTask< Integer, Void, String> {
     private Integer cat_id;
     private String note;
     private Integer item_id;
+    //constructor to instantite the class
     public AddingItem(Item item){
         item_name = item.getName();
+        //Parse the LocalDateTime in joda that is stored
         expirationarr = item.getDate().toString().split("T");
         String [] expirationtemp = expirationarr[1].split("\\.");
+        //pass in the newly parsed date and make it into MYSQL format for dates
         expiration = expirationarr[0].concat(" " +expirationtemp[0]);
         cat_id = item.getCategoryID();
         note = item.getNote();
@@ -76,19 +78,17 @@ class AddingItem extends AsyncTask< Integer, Void, String> {
 
             myApiService = builder.build();
         }
+        //set the stored user id
         Integer userId = params[0];
         try {
-            String s =  myApiService.addItem(item_id,item_name, expiration, cat_id, userId, note).execute().getData();
-            return s;
-            //return  myApiService.connect().execute().getData();
+            return   myApiService.addItem(item_id,item_name, expiration, cat_id, userId, note).execute().getData();
 
-            //return myApiService.sayNO(name).execute().getData();
-//            //return myApiService.sayHi(name).execute().getData();
         } catch (IOException e) {
             return e.getMessage();
         }
     }
 }
+//Asynchronous task to update an item
 class UpdatingItem extends AsyncTask< Integer, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
@@ -98,10 +98,13 @@ class UpdatingItem extends AsyncTask< Integer, Void, String> {
     private Integer cat_id;
     private String note;
     private Integer item_id;
+    //constructor to pass in arguments that can't normally be passed in
     public UpdatingItem(Item item){
         item_name = item.getName();
+        //Parse the jota LocalDateTime
         expirationarr = item.getDate().toString().split("T");
         String [] expirationtemp = expirationarr[1].split("\\.");
+        //Reformat the string to fit MYSQL format for dates
         expiration = expirationarr[0].concat(" " +expirationtemp[0]);
         cat_id = item.getCategoryID();
         note = item.getNote();
@@ -118,23 +121,20 @@ class UpdatingItem extends AsyncTask< Integer, Void, String> {
         }
         Integer userId = params[0];
         try {
-            String s =  myApiService.updateItem(item_name, expiration, cat_id, userId, note, item_id).execute().getData();
-            return s;
-            //return  myApiService.connect().execute().getData();
-
-            //return myApiService.sayNO(name).execute().getData();
-//            //return myApiService.sayHi(name).execute().getData();
+            return myApiService.updateItem(item_name, expiration, cat_id, userId, note, item_id).execute().getData();
         } catch (IOException e) {
             return e.getMessage();
         }
     }
 
 }
+//Asynchronous task to adding a category
 class AddingCategory extends AsyncTask<Integer, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
     private Integer cat_id;
     private String cat_name;
+    //constructor to store the additional values of the category that can't be passed in
     public AddingCategory(Category cat) {
         cat_id = cat.getID();
         cat_name = cat.getName();
@@ -145,23 +145,18 @@ class AddingCategory extends AsyncTask<Integer, Void, String> {
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
             // end options for devappserver
-
             myApiService = builder.build();
         }
         Integer user = params[0];
         try {
-            String s =  myApiService.addCategory(cat_id, cat_name, user).execute().getData();
-            return s;
-            //return  myApiService.connect().execute().getData();
-
-            //return myApiService.sayNO(name).execute().getData();
-            //return myApiService.sayHi(name).execute().getData();
+            return myApiService.addCategory(cat_id, cat_name, user).execute().getData();
         } catch (IOException e) {
             return e.getMessage();
         }
     }
 
 }
+//Asynchronous task to update a category
 class UpdatingCategory extends AsyncTask<Pair<String,Integer>, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
@@ -178,18 +173,15 @@ class UpdatingCategory extends AsyncTask<Pair<String,Integer>, Void, String> {
         String cat_name = params[0].first;
         Integer user = params[0].second;
         try {
-            String s =  myApiService.updateCategory(cat_name, user).execute().getData();
-            return s;
-            //return  myApiService.connect().execute().getData();
-
-            //return myApiService.sayNO(name).execute().getData();
-            //return myApiService.sayHi(name).execute().getData();
+            return myApiService.updateCategory(cat_name, user).execute().getData();
         } catch (IOException e) {
             return e.getMessage();
         }
     }
 
 }
+//This class is more of a debugging class as of right now
+//used for rapid responses/ modifying the framework of the database
 class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
@@ -197,39 +189,23 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
     @Override
     protected String doInBackground(Pair<Context, String>... params) {
         if(myApiService == null) {  // Only do this once
-//            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
-//                    new AndroidJsonFactory(), null)
-//                    // options for running against local devappserver
-//                    // - 10.0.2.2 is localhost's IP address in Android emulator
-//                    // - turn off compression when running against local devappserver
-//                    .setRootUrl("http://10.0.2.2:8080/_ah/api/")
-//                    .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-//                        @Override
-//                        public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-//                            abstractGoogleClientRequest.setDisableGZipContent(true);
-//                        }
-//                    });
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
             // end options for devappserver
-
             myApiService = builder.build();
         }
 
         context = params[0].first;
         String name = params[0].second;
 
-
         try {
-
+            //call the connect function in backend, .getData ensures the operation to be completed before moving on
             return  myApiService.connect().execute().getData();
-
-            //return myApiService.sayNO(name).execute().getData();
-            //return myApiService.sayHi(name).execute().getData();
         } catch (IOException e) {
             return e.getMessage();
         }
     }
+    //output the message
     @Override
     protected void onPostExecute(String result) {
         Toast.makeText(context, result, Toast.LENGTH_LONG).show();
@@ -237,12 +213,11 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
 }
 public class ServerAPI {
     private static ServerAPI sInstance;
-    private Context context;
-
-    public Integer UserID;
-    private Authenticate auth;
-    private AddingCategory addingc;
-    private UpdatingCategory updatingc;
+    private Context context;                //used as the context for outputting if needed
+    public Integer UserID;                  //the userid that the user holds
+    private Authenticate auth;              //Authetication class to help autheticate the user
+    private AddingCategory addingc;         //Adding category class to help add categories for the user
+    private UpdatingCategory updatingc;     //Updating category class to help update categories on the server
     private ServerAPI(Context context) {
         this.context = context;
     }
@@ -260,29 +235,16 @@ public class ServerAPI {
         //t.execute(new Pair<Context, String>(context, "Manfred"));
     }
 
+    //Starts the asynchronus task of adding a category
     public void AddingCat(Category cat){
         addingc = new AddingCategory(cat);
-
-        //try {
-            //add .get() to end while testing for quick results
-            //String s = addingc.execute(new Pair<String, Integer>(c_name, UserID)).get();
-            addingc.execute(UserID);
-            //String s = vali.Authentication(uname,upass);
-            //works everywhere except debug mode
-            String b = "sdf";
-            //return s;
-//        }
-//        catch (InterruptedException e )
-//        {
-//            Toast.makeText(context,e.getMessage(), Toast.LENGTH_LONG).show();
-//        }catch (ExecutionException b ) {
-//            Toast.makeText(context,b.getMessage(), Toast.LENGTH_LONG).show();
-//        }
-
+        addingc.execute(UserID);
     }
+    //Starts the asynchronus task of updating a category
     public void UpdatingCat(String c_name){
         updatingc = new UpdatingCategory();
         updatingc.execute(new Pair<String, Integer>(c_name, UserID));
+        //used for debbugging purposes to grab a string output
 //        try {
             //String s = updatingc.execute(new Pair<String, Integer>(c_name, UserID)).get();
             //String s = vali.Authentication(uname,upass);
@@ -298,47 +260,27 @@ public class ServerAPI {
 //        }
 
     }
+    //Starts the asynchronus task of updating an item
     public void AddItem(Item item){
         AddingItem addingi = new AddingItem(item);
-        //addingi.execute( UserID);
-
-//        try {
-//            String s = addingi.execute( UserID).get();
-//            String b = "asdfsad";
-//            return s;
-//        }
-//        catch (InterruptedException e )
-//        {
-//            return e.getMessage();
-//        }catch (ExecutionException b ) {
-//            return b.getMessage();
-//        }
-        //return "asdf";
+        addingi.execute( UserID);
     }
+    //Starts the asynchronus task of updating an item
     public void UpdateItem(Item item)
     {
         UpdatingItem updatingi = new UpdatingItem(item);
         updatingi.execute( UserID);
-//        try {
-//            String s = updatingi.execute( UserID).get();
-//            String b = "asdfsad";
-//            return s;
-//        }
-//        catch (InterruptedException e )
-//        {
-//            return e.getMessage();
-//        }catch (ExecutionException b ) {
-//            return b.getMessage();
-//        }
     }
-
+    //Boolean function that returns true id the username and password exist
+    //Then it stores the user id for the singleton
     public boolean CheckAuthenticate(String uname,String upass ){
         auth = new Authenticate();
         try {
+            //starts asychronus task to make sure user is valid
             Pair<String, Integer> s = auth.execute(new Pair<String, String>(uname, upass)).get();
+            //stores the user id obtained
             UserID = s.second;
-            //String s = vali.Authentication(uname,upass);
-            //works everywhere except debug mode
+            //return whether or not the username and password is valid
             return s.first.equals("true");
         }
         catch (InterruptedException e )

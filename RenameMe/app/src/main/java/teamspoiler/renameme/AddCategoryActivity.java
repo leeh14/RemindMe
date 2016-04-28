@@ -41,23 +41,8 @@ public class AddCategoryActivity extends AppCompatActivity {
                 String categoryName = InputName.getText().toString(); // get username from input box
                 Category nc = new Category(categoryName);
                 db.addCategory(nc);
-
-                //testing adding the category to the server
-                //String s = serAPI.AddingCat(categoryName);
-                //adding category to server
                 serAPI.AddingCat(nc);
 
-                //testing the updating category
-//                IterableMap<Item> k = db.getItems();
-//                for (Item i : k)
-//                    if(i.getName().equals("Guth"))
-//                    {
-//                        i.setName("Not Guth");
-//                        i.setNote("ther is something");
-//                        serAPI.UpdateItem(i);
-//                    }
-                    //serAPI.UpdatingCat(i.getName());
-                //testing the updating of categories
                 finish();
             }
         });

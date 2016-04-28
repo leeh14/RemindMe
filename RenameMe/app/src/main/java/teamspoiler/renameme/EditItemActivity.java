@@ -27,6 +27,7 @@ public class EditItemActivity extends AppCompatActivity {
     private int iid;                                           // item id and category id
     private Item item;                                         // the item object
     private int sMinute, sHour, sDay, sMonth, sYear;      // the time
+    private ServerAPI ServApi;                                  //reference to the server database
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +122,7 @@ public class EditItemActivity extends AppCompatActivity {
                 item.setDate(new LocalDateTime(sYear, sMonth+1, sDay, sHour, sMinute));
                 item.setNote(Note.getText().toString());
                 db.updateItem(item);
+                ServApi.UpdateItem(item);
                 ItemNotification.notify(EditItemActivity.this, item);
                 finish();
             }

@@ -50,7 +50,6 @@ public class ItemActivity extends AppCompatActivity {
         final TextView ExpTime = (TextView) findViewById(R.id.Item_ExpTime);
         final TextView Note = (TextView) findViewById(R.id.Item_Note);
         final Button Edit = (Button) findViewById(R.id.Item_EditButton);
-        final Button Share = (Button) findViewById(R.id.Item_ShareButton);
         final Button Delete = (Button) findViewById(R.id.Item_DeleteButton);
 
         CategoryTitle.setText(category.getName());
@@ -73,16 +72,6 @@ public class ItemActivity extends AppCompatActivity {
                 Intent EditItemIntent = new Intent(v.getContext(), EditItemActivity.class);
                 EditItemIntent.putExtra(getString(R.string.extra_item_id), iid);
                 startActivityForResult(EditItemIntent, EDIT_ITEM_REQUEST);
-            }
-        }));
-
-        // set action for add item button at bottom
-        Share.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent ShareItemIntent = new Intent(v.getContext(), ShareItemActivity.class);
-                ShareItemIntent.putExtra(getString(R.string.extra_item_id), iid);
-                startActivity(ShareItemIntent);
             }
         }));
 

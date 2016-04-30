@@ -28,7 +28,6 @@ public class CategoriesActivity extends AppCompatActivity {
     // initialize
     private void initialize() {
         final Button Friends = (Button) findViewById(R.id.Cates_FriendsButton);
-        final Button Settings = (Button) findViewById(R.id.Cates_SettingsButton);
         final Button AddCate = (Button) findViewById(R.id.Cates_AddCategoryButton);
 
         // set action for friend button at top
@@ -37,15 +36,6 @@ public class CategoriesActivity extends AppCompatActivity {
            public void onClick(View v) {
                Intent FriendsIntent = new Intent(v.getContext(), FriendsActivity.class);
                startActivity(FriendsIntent);
-           }
-       }));
-
-        // set action for setting button at top
-       Settings.setOnClickListener((new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Intent SettingsIntent = new Intent(v.getContext(), SettingsActivity.class);
-               startActivity(SettingsIntent);
            }
        }));
 

@@ -25,18 +25,9 @@ tools:context="spoiler.ui.CategoryActivity">
     android:text="Friends"
     android:id="@+id/Cate_FriendsButton"
     android:layout_alignParentTop="true"
-    android:layout_toEndOf="@+id/Cate_CategoriesButton"
-    android:layout_toStartOf="@+id/Cate_SettingsButton" />
-
-<Button
-    android:layout_width="120sp"
-    android:layout_height="wrap_content"
-    android:text="Settings"
-    android:id="@+id/Cate_SettingsButton"
-    android:layout_alignParentTop="true"
     android:layout_alignParentEnd="true" />
 
-<TextView
+    <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceLarge"
@@ -54,28 +45,16 @@ tools:context="spoiler.ui.CategoryActivity">
     android:id="@+id/Cate_Text"
     android:textSize="20sp"
     android:layout_marginRight="31dp"
-    android:layout_marginEnd="31dp"
     android:layout_below="@+id/Cate_Title"
-    android:layout_toLeftOf="@+id/Cate_SortOptions"
-    android:layout_toStartOf="@+id/Cate_SortOptions" />
+    android:layout_toEndOf="@+id/Cate_AddItemButton" />
 
     <Spinner
         android:layout_width="160sp"
         android:layout_height="wrap_content"
         android:id="@+id/Cate_SortOptions"
-        android:layout_alignRight="@+id/Cate_SettingsButton"
-        android:layout_alignEnd="@+id/Cate_SettingsButton"
-        android:layout_alignBottom="@+id/Cate_Text"
-        android:layout_below="@+id/Cate_Title" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Share"
-        android:id="@+id/Cate_ShareButton"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/Cate_DeleteButton"
-        android:layout_toEndOf="@+id/Cate_AddItemButton" />
+        android:layout_below="@+id/Cate_Title"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/Cate_ItemsList" />
 
     <Button
         android:layout_width="wrap_content"
@@ -92,7 +71,7 @@ tools:context="spoiler.ui.CategoryActivity">
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/Cate_Text"
-        android:layout_above="@+id/Cate_ShareButton" />
+        android:layout_above="@+id/Cate_AddItemButton" />
 
     <Button
         android:layout_width="wrap_content"
@@ -100,7 +79,7 @@ tools:context="spoiler.ui.CategoryActivity">
         android:text="Delete"
         android:id="@+id/Cate_DeleteButton"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/Cate_Text" />
+        android:layout_toEndOf="@+id/Cate_AddItemButton" />
 
     <Button
         android:layout_width="wrap_content"

@@ -54,7 +54,6 @@ public class CategoryActivity extends AppCompatActivity {
         final Button Friends = (Button) findViewById(R.id.Cate_FriendsButton);
         final Button AddItem = (Button) findViewById(R.id.Cate_AddItemButton);
         final Button Delete = (Button) findViewById(R.id.Cate_DeleteButton);
-        final Button Merge = (Button) findViewById(R.id.Cate_MergeButton);
 
         // set action for categories button at top
         Categories.setOnClickListener((new View.OnClickListener() {
@@ -120,6 +119,7 @@ public class CategoryActivity extends AppCompatActivity {
             }
         }));
 
+        /* merge code that is removed
         Merge.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,7 +189,7 @@ public class CategoryActivity extends AppCompatActivity {
                 builderSingle.show();
             }
         }));
-
+        */
 
         populateItemsList();
         registerClickCallBack();

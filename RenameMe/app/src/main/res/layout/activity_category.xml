@@ -59,10 +59,11 @@ tools:context="spoiler.ui.CategoryActivity">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+Add Item"
+        android:text="+Add New Item"
         android:id="@+id/Cate_AddItemButton"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/Cate_DeleteButton" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -79,15 +80,7 @@ tools:context="spoiler.ui.CategoryActivity">
         android:text="Delete"
         android:id="@+id/Cate_DeleteButton"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/Cate_AddItemButton" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Merge"
-        android:id="@+id/Cate_MergeButton"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/Cate_DeleteButton" />
+        android:layout_alignStart="@+id/Cate_SortOptions" />
 
 </RelativeLayout>

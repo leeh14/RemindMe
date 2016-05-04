@@ -13,6 +13,8 @@ import org.joda.time.LocalDateTime;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import teamspoiler.renameme.DataElements.Category;
@@ -281,6 +283,89 @@ class DeleteingCategory extends AsyncTask< Integer, Void, String> {
         }
     }
 }
+//Asynchronous task to share a category
+class SharingCategory extends AsyncTask< Integer, Void, String> {
+    private static MyApi myApiService = null;
+    private Context context;
+    private Integer friend_id;
+    private Integer cat_id;
+    public SharingCategory(Integer friend, Integer cat){
+        friend_id = friend;
+        cat_id = cat;
+    }
+
+    @Override
+    protected String doInBackground(Integer... params) {
+        if (myApiService == null) {
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
+            // end options for devappserver
+
+            myApiService = builder.build();
+        }
+        //set the stored user id
+        Integer userid = params[0];
+        try {
+            return myApiService.shareCategory(friend_id, userid, cat_id).execute().getData();
+
+        } catch (IOException e) {
+            return e.getMessage();
+        }
+    }
+}
+//Asynchronous task to check if share category is already in
+class CheckShare extends AsyncTask<Pair<Integer,Integer>, Void, Pair<Pair<String, String>,Integer>> {
+    private static MyApi myApiService = null;
+    private Context context;
+
+    @Override
+    protected Pair<Pair<String, String>,Integer> doInBackground(Pair<Integer, Integer>... params) {
+        if (myApiService == null) {
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
+            // end options for devappserver
+
+            myApiService = builder.build();
+        }
+        Integer user_id = params[0].first;
+        Integer cat_id = params[0].second;
+        try {
+            //grab the response from backend and get the current user's id
+            String s = myApiService.checkShareCategory(user_id).execute().getData();
+            String name = myApiService.checkShareCategory(user_id).execute().getShareName();
+            Pair<String , String> data = new Pair<String, String>(s,name);
+            Integer d = myApiService.checkShareCategory(user_id).execute().getShareCat();
+            return new Pair<Pair<String , String>, Integer>(data, d);
+        } catch (IOException e) {
+            return new Pair<Pair<String , String>, Integer>(new Pair<String ,String>(e.getMessage(), "sdf"), -1);
+        }
+    }
+}
+//Asynchronous task to check if share category is already in
+class AddShare extends AsyncTask<Integer, Void, List<String>> {
+    private static MyApi myApiService = null;
+    private Context context;
+
+    @Override
+    protected List<String> doInBackground(Integer... params) {
+        if (myApiService == null) {
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
+            // end options for devappserver
+
+            myApiService = builder.build();
+        }
+        Integer cat_id = params[0];
+        try {
+            //grab the response from backend and get the current user's id
+            return myApiService.addShareItems(cat_id).execute().getItems();
+
+        } catch (IOException e) {
+            return new ArrayList<String>();
+        }
+    }
+
+}
 //This class is more of a debugging class as of right now
 //used for rapid responses/ modifying the framework of the database
 class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
@@ -370,6 +455,39 @@ public class ServerAPI {
         DeleteingCategory deletingc = new DeleteingCategory();
         deletingc.execute(cat_id);
     }
+    //Starts the asynchronus task of adding a category
+    public void ShareCategory(Friend friend, Integer cat_id){
+        SharingCategory sharingc = new SharingCategory(friend.getID(), cat_id);
+        sharingc.execute(UserID);
+    }
+    //Starts the asynchronus task of adding a category
+    public Pair<Boolean, Pair<Integer,String>> CheckShareCategory(){
+        CheckShare checkshare = new CheckShare();
+        try {
+            Pair<Pair<String, String> , Integer> s = checkshare.execute(new Pair<Integer, Integer>(UserID, 123)).get();
+            return new Pair<Boolean, Pair<Integer,String>>(s.first.first.equals("true"), new Pair<Integer, String>(s.second, s.first.second));
+            //return new Pair<Boolean, Integer>(false, 234);
+        }
+        catch (InterruptedException e )
+        {
+            return new Pair<Boolean, Pair<Integer,String>>(false,new Pair<Integer, String>( -1, ""));
+        }catch (ExecutionException b ) {
+            return new Pair<Boolean, Pair<Integer,String>>(false,new Pair<Integer, String>( -1, ""));
+        }
+    }
+    //starts the asynchronus task of adding share category items
+    public List<String> AddShare(Integer cat_id){
+        AddShare addingshare = new AddShare();
+        try {
+            return addingshare.execute(cat_id).get();
+        }
+        catch (InterruptedException e )
+        {
+            return new ArrayList<String>();
+        }catch (ExecutionException b ) {
+            return new ArrayList<String>();
+        }
+    }
     //Starts the asynchronus task of updating an item
     public void AddItem(Item item){
         AddingItem addingi = new AddingItem(item);
@@ -392,6 +510,7 @@ public class ServerAPI {
         AddingFriend addingf = new AddingFriend(friend);
         addingf.execute(UserID);
     }
+
     //Boolean function that returns true id the username and password exist
     //Then it stores the user id for the singleton
     public boolean CheckAuthenticate(String uname,String upass ){

@@ -52,7 +52,8 @@ public class MyEndpoint {
                 //dropping a table
                 //conn.createStatement().execute("DROP TABLE users IF EXISTS;");
                 //createing the user table
-                //conn.createStatement().execute("CREATE TABLE users (u_id INTEGER AUTO_INCREMENT, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, PRIMARY KEY (u_id,username)) ;");
+                //conn.createStatement().execute("DROP TABLE sharecategories;");
+                //conn.createStatement().execute("CREATE TABLE sharecategories (friend_id INTEGER , user_id INTEGER , cat_id INTEGER, cat_name VARCHAR(255), PRIMARY KEY (friend_id, user_id)) ;");
                 //insertinginto a table
                 //conn.createStatement().execute("INSERT INTO users(username, password) VALUES('sdd','sdd')");
                 //inserting into values
@@ -290,7 +291,7 @@ public class MyEndpoint {
                 //message to hold and return if there are any errors
                 response.setData("Deleteing");
                 //MYSQL insert statement
-                conn.createStatement().execute("DELETE FROM items WHERE item_id = '" +item_id +",)");
+                conn.createStatement().execute("DELETE FROM items WHERE item_id = '" + item_id + ",)");
             }finally {
                 conn.close();
             }
@@ -350,6 +351,96 @@ public class MyEndpoint {
 
                 //adding in the friend info
                 conn.createStatement().execute("INSERT INTO friends(friend_id, friend_name, friend_username, userid) VALUES('"+ friend_id+ "','" + friend_name + "','"+friendusername +"','" +user_id+"')");
+            }finally {
+                conn.close();
+            }
+        }catch(SQLException e){
+            response.setData(e.toString());
+        }
+        return response;
+    }
+    //Method to add a shared cateogory
+    @ApiMethod(name = "ShareCategory")
+    public MyBean ShareCategory(@Named("friend_id") Integer friend_id, @Named("user_id") Integer user_id, @Named ("cat_id") Integer cat_id) {
+        MyBean response = new MyBean();
+        String url = null;
+        response.setData("addItem");
+        try {
+            if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+                Class.forName("com.mysql.jdbc.GoogleDriver");
+                url = "jdbc:google:mysql://headsup-1260:headsup/Users?user=root";
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            Connection conn = DriverManager.getConnection(url);
+            try {
+                conn.createStatement().execute("INSERT INTO sharecategories(friend_id,user_id, cat_id) VALUES('"+ friend_id+ "','" + user_id + "','"+cat_id+"')");
+            }finally {
+                conn.close();
+            }
+        }catch(SQLException e){
+            response.setData(e.toString());
+        }
+        return response;
+    }
+    //Method to add a Check if shared cateogory is already added
+    @ApiMethod(name = "CheckShareCategory")
+    public MyBean CheckShareCategory(@Named("user_id") Integer user_id) {
+        MyBean response = new MyBean();
+        String url = null;
+        response.setData("addItem");
+        try {
+            if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+                Class.forName("com.mysql.jdbc.GoogleDriver");
+                url = "jdbc:google:mysql://headsup-1260:headsup/Users?user=root";
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            Connection conn = DriverManager.getConnection(url);
+            try {
+                ResultSet result =  conn.createStatement().executeQuery("select case when (sc.user_id = '"+user_id+ "' OR sc.friend_id  = '"+ user_id+"') then 'true' else 'false' end, sc.cat_id, sc.cat_name from sharecategories sc");
+                //grab the user id on the server and whether or not username password exist
+                while(result.next()) {
+                    response.setData(result.getString(1));
+                    response.setShareCat(result.getInt(3));
+                    response.setShareName(result.getString(4));
+                }
+
+            }finally {
+                conn.close();
+            }
+        }catch(SQLException e){
+            response.setData(e.toString());
+        }
+        return response;
+    }
+    //Method to add the share category items
+    @ApiMethod(name = "AddShareItems")
+    public MyBean AddShareItems(@Named("cat_id") Integer cat_id) {
+        MyBean response = new MyBean();
+        String url = null;
+        try {
+            if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+                Class.forName("com.mysql.jdbc.GoogleDriver");
+                url = "jdbc:google:mysql://headsup-1260:headsup/Users?user=root";
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            Connection conn = DriverManager.getConnection(url);
+            try {
+                ResultSet result =  conn.createStatement().executeQuery("select * from categories c WHERE c.cat_id = '" + cat_id+"')");
+                //grab the user id on the server and whether or not username password exist
+                while(result.next()) {
+                    //item string is name + expirationdate + note
+                    String item = result.getString(3) + "|" + result.getString(5) + "|" + result.getString(6);
+                    response.addItem(item);
+                }
             }finally {
                 conn.close();
             }

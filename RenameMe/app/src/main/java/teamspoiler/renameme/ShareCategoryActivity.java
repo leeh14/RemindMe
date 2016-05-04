@@ -16,6 +16,7 @@ import teamspoiler.renameme.DataElements.*;
 public class ShareCategoryActivity extends AppCompatActivity {
 
     private DatabaseHelperClass db;                 // reference to database
+    private ServerAPI Servera;                      //reference to server database
     static int cid;                                 // id of the category
     private Category category;                     // reference to category itself
     private IterableMap<Friend> friends;           // reference to friend list
@@ -96,7 +97,7 @@ public class ShareCategoryActivity extends AppCompatActivity {
                         .setCancelable(false)
                         .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                shareCategory(friend);
+                                shareCategory(friend, category.getID());
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -116,10 +117,11 @@ public class ShareCategoryActivity extends AppCompatActivity {
     }
 
     // send request to server of sharing a category with a friend
-    private void shareCategory(Friend friend){
+    private void shareCategory(Friend friend, Integer cat_id){
         // target category is = static variable above named category
         // target friend is = Friend argument named friend
         // TO-DO send request to server
+
     }
 }
 

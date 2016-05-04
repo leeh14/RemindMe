@@ -3,17 +3,25 @@ package teamspoiler.renameme;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import teamspoiler.renameme.DataElements.*;
 
 public class CategoriesActivity extends AppCompatActivity {
 
     private DatabaseHelperClass db;                     // reference to database helper class
+    private ServerAPI Servera;                          //reference to server database helper class
     private IterableMap<Category>  categories;         // categories data class
     static final int ADD_CATEGORY_REQUEST = 1;      // The request code
     static final int MERGE_CATEGORY_REQUEST = 2;    // Th request code
@@ -51,6 +59,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
         // get reference
         db = DatabaseHelperClass.getInstance(this);
+        Servera = ServerAPI.getInstance(this);
         categories = db.getCategories();
         // populate the category list
         populateCategoryList();
@@ -60,6 +69,34 @@ public class CategoriesActivity extends AppCompatActivity {
 
     // populate the category list with category button
     private void populateCategoryList() {
+        //adding to categories from the share
+        Pair<Boolean, Pair<Integer,String>> check = Servera.CheckShareCategory();
+        if(check.first == true){
+            //check current database and see if category is in if not add it
+            Boolean add = true;
+            for (Category i : db.getCategories())
+                if(i.getID() == check.second.first){
+                    add = false;
+                }
+            //if add remains true must create the category
+            if(add == true){
+                Category c = new Category(check.second.second);
+                db.addCategory(c);
+                //creating the new items in new category
+                List<String> new_item = Servera.AddShare(check.second.first);
+                for (String s: new_item
+                     ) {
+                    String delims = "|";
+                    String[] item_values= s.split(delims);
+                    Item item = new Item(item_values[0],check.second.first );
+                    LocalDateTime dateTime = LocalDateTime.parse(item_values[1]);
+                    item.setDate(dateTime);
+                    item.setNote(item_values[2]);
+                    db.addItem(item);
+                }
+            }
+        }
+        //
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
                 this,
                 R.layout.data_categorieslist,

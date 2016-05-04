@@ -13,6 +13,8 @@ import android.support.v4.app.TaskStackBuilder;
 
 import org.joda.time.Duration;
 import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -28,6 +30,7 @@ public class ItemNotification extends Service {
     //The maximum duration of time (in milliseconds) that the notification can
     //be offset from the item's expiration date.
     public final int DURATION_WINDOW = 5*60*1000;
+    public static DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("MM/dd 'at' hh:mm a");
 
     // Use this method to create an Alarm that goes off at the given time and
     //sets off the ItemNotification Service. Call it whenever an item is added or modified
@@ -54,17 +57,20 @@ public class ItemNotification extends Service {
     protected Notification buildNotification(Item item) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.my_selector)
+                        .setSmallIcon(R.drawable.icon)
                         .setContentTitle("RemindMe")
-                        .setContentText(item.getName() + " at " + item.getDate().toString());
+                        .setContentText(item.getName() + " expires on " + FORMATTER.print(item.getDate()));
 
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(CategoriesActivity.class);
+        //stackBuilder.addParentStack(CategoriesActivity.class);
         // Adds the Intent that starts the Activity to the top of the stack
 
         // Creates an explicit intent for an Activity in your app
+        Intent categoriesIntent = new Intent(this, CategoriesActivity.class);
+        stackBuilder.addNextIntent(categoriesIntent);
+
         Intent categoryIntent = new Intent(this, CategoryActivity.class);
         categoryIntent.putExtra(getString(R.string.extra_category_id), item.getCategoryID());
         stackBuilder.addNextIntent(categoryIntent);
@@ -72,7 +78,7 @@ public class ItemNotification extends Service {
         Intent itemIntent = new Intent(this,ItemActivity.class);
         itemIntent.putExtra(getString(R.string.extra_item_id), item.getID());
         stackBuilder.addNextIntent(itemIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(2, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mBuilder.setContentIntent(resultPendingIntent);
 

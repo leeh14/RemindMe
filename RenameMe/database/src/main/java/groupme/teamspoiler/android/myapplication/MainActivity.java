@@ -3,9 +3,12 @@ package groupme.teamspoiler.android.myapplication;
 import groupme.teamspoiler.android.myapplication.DataElements.*;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -147,6 +150,13 @@ public class MainActivity extends AppCompatActivity {
                 db.deleteFriend(Integer.parseInt(idView.getText().toString()));
             }
         });
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.icon)
+                        .setContentTitle("RemindMe")
+                        .setContentText("test");
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(1,mBuilder.build());
     }
 
     public String resultToStringCategory(IterableMap<Category> map) {

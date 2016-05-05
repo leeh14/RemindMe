@@ -38,16 +38,7 @@ public class ShareCategoryActivity extends AppCompatActivity {
         Servera = ServerAPI.getInstance(this);
         category = db.getCategory(cid);
         friends = db.getFriends();
-        final Button Save = (Button) findViewById(R.id.ShareCate_ShareButton);
         final Button Cancel = (Button) findViewById(R.id.ShareCate_CancelButton);
-
-        // set action for friend button at top
-        Save.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        }));
 
         // set action for setting button at top
         Cancel.setOnClickListener((new View.OnClickListener() {

@@ -54,6 +54,8 @@ public class CategoryActivity extends AppCompatActivity {
         final Button Friends = (Button) findViewById(R.id.Cate_FriendsButton);
         final Button AddItem = (Button) findViewById(R.id.Cate_AddItemButton);
         final Button Delete = (Button) findViewById(R.id.Cate_DeleteButton);
+        final Button Share = (Button) findViewById(R.id. Cate_ShareButton);
+
 
         // set action for categories button at top
         Categories.setOnClickListener((new View.OnClickListener() {
@@ -116,6 +118,15 @@ public class CategoryActivity extends AppCompatActivity {
 
                 // show it
                 alertDialog.show();
+            }
+        }));
+
+        // set action for share button at bottom
+        Share.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ShareIntent = new Intent(v.getContext(), ShareCategoryActivity.class);
+                startActivity(ShareIntent);
             }
         }));
 

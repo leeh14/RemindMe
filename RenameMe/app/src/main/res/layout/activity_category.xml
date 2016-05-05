@@ -45,16 +45,16 @@ tools:context="spoiler.ui.CategoryActivity">
     android:id="@+id/Cate_Text"
     android:textSize="20sp"
     android:layout_marginRight="31dp"
-    android:layout_below="@+id/Cate_Title"
-    android:layout_toEndOf="@+id/Cate_AddItemButton" />
+    android:layout_alignTop="@+id/Cate_SortOptions"
+    android:layout_alignStart="@+id/Cate_Title" />
 
     <Spinner
-        android:layout_width="160sp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="30sp"
         android:id="@+id/Cate_SortOptions"
         android:layout_below="@+id/Cate_Title"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@+id/Cate_ItemsList" />
+        android:layout_alignEnd="@+id/Cate_Title"
+        android:layout_toEndOf="@+id/Cate_Text" />
 
     <Button
         android:layout_width="wrap_content"
@@ -63,15 +63,14 @@ tools:context="spoiler.ui.CategoryActivity">
         android:id="@+id/Cate_AddItemButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/Cate_DeleteButton" />
+        android:layout_toStartOf="@+id/Cate_SortOptions" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Cate_ItemsList"
-        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Cate_SortOptions"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/Cate_Text"
         android:layout_above="@+id/Cate_AddItemButton" />
 
     <Button
@@ -79,8 +78,16 @@ tools:context="spoiler.ui.CategoryActivity">
         android:layout_height="wrap_content"
         android:text="Delete"
         android:id="@+id/Cate_DeleteButton"
+        android:layout_alignTop="@+id/Cate_ShareButton"
+        android:layout_toStartOf="@+id/Cate_ShareButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share"
+        android:id="@+id/Cate_ShareButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/Cate_SortOptions" />
+        android:layout_alignStart="@+id/Cate_FriendsButton" />
 
 </RelativeLayout>

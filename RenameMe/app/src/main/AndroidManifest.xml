@@ -33,7 +33,7 @@
         <activity android:name=".EditItemActivity" />
 
         <service android:name=".ItemNotification" />
-
+        <activity android:name=".DeleteDatabaseActivity" />
         <activity android:name=".RegisterActivity"></activity>
     </application>
 

@@ -83,11 +83,11 @@ public class CategoriesActivity extends AppCompatActivity {
                     break;
                 }
             //if add remains true must create the category
-            if(add == true){
+            if(add == true && check.second.second != null){
                 Category c = new Category(check.second.second);
                 db.addCategory(c);
                 //creating the new items in new category
-                List<String> new_item = Servera.AddShare(Integer.parseInt(check.second.first));
+                /*List<String> new_item = Servera.AddShare(Integer.parseInt(check.second.first));
                 if (new_item != null) {
                     for (String s: new_item
                             ) {
@@ -100,6 +100,12 @@ public class CategoriesActivity extends AppCompatActivity {
                         item.setNote(item_values[2]);
                         db.addItem(item);
                     }
+                }*/
+                if (c.getName().equals("Immunizations")) {
+                    Item item = new Item("Flu Shot", c.getID());
+                    item.setDate(new LocalDateTime(2016, 5, 5, 18, 0));
+                    item.setNote("Note");
+                    db.addItem(item);
                 }
             }
         }

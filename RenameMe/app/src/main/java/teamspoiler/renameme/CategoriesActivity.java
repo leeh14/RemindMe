@@ -72,18 +72,21 @@ public class CategoriesActivity extends AppCompatActivity {
         //adding to categories from the share
         Pair<Boolean, Pair<Integer,String>> check = Servera.CheckShareCategory();
         if(check.first == true){
+            Integer cat_id;
             //check current database and see if category is in if not add it
             Boolean add = true;
             for (Category i : db.getCategories())
-                if(i.getID() == check.second.first){
+                if(i.getName().equals(check.second.second)){
+                    cat_id = i.getID();
                     add = false;
+                    break;
                 }
             //if add remains true must create the category
             if(add == true){
                 Category c = new Category(check.second.second);
                 db.addCategory(c);
                 //creating the new items in new category
-                List<String> new_item = Servera.AddShare(check.second.first);
+                List<String> new_item = Servera.AddShare(c.getID());
                 for (String s: new_item
                      ) {
                     String delims = "|";

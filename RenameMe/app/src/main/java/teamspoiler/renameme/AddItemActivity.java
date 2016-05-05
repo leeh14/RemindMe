@@ -102,7 +102,7 @@ public class AddItemActivity extends AppCompatActivity {
                 Item item = new Item(Name.getText().toString(), cid);
                 item.setDate(new LocalDateTime(sYear, sMonth+1, sDay, sHour, sMinute));
                 item.setNote(Note.getText().toString());
-                db.addItem(item);
+                Boolean k = db.addItem(item);
                 serAPI.AddItem(item);
                 ItemNotification.notify(AddItemActivity.this, item);
                 finish();

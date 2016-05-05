@@ -366,10 +366,9 @@ public class MyEndpoint {
     }
     //Method to add a shared cateogory
     @ApiMethod(name = "ShareCategory")
-    public MyBean ShareCategory(@Named("friend_id") Integer friend_id, @Named("user_id") Integer user_id, @Named ("cat_id") Integer cat_id) {
+    public MyBean ShareCategory(@Named("friend_name") String friend_name, @Named("user_id") Integer user_id, @Named ("cat_id") Integer cat_id, @Named ("cat_name") String cat_name) {
         MyBean response = new MyBean();
         String url = null;
-        response.setData("addItem");
         try {
             if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
                 Class.forName("com.mysql.jdbc.GoogleDriver");
@@ -381,7 +380,10 @@ public class MyEndpoint {
         try{
             Connection conn = DriverManager.getConnection(url);
             try {
-                conn.createStatement().execute("INSERT INTO sharecategories(friend_id,user_id, cat_id) VALUES('"+ friend_id+ "','" + user_id + "','"+cat_id+"')");
+                ResultSet result =  conn.createStatement().executeQuery("select u.u_id FROM users u WHERE u.username = '"+friend_name +"'");
+                result.absolute(1);
+                Integer friend_id = result.getInt("u_id");
+                conn.createStatement().execute("INSERT INTO sharecategories(friend_id,user_id, cat_id, cat_name) VALUES('"+ friend_id+ "','" + user_id + "','"+cat_id+"','" + cat_name + "')");
             }finally {
                 conn.close();
             }

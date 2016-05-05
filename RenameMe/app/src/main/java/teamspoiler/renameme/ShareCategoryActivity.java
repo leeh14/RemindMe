@@ -98,7 +98,7 @@ public class ShareCategoryActivity extends AppCompatActivity {
                         .setCancelable(false)
                         .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                shareCategory(friend, category.getID());
+                                shareCategory(friend, category.getID(),category.getName());
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -118,11 +118,11 @@ public class ShareCategoryActivity extends AppCompatActivity {
     }
 
     // send request to server of sharing a category with a friend
-    private void shareCategory(Friend friend, Integer cat_id){
+    private void shareCategory(Friend friend, Integer cat_id,String cat_name){
         // target category is = static variable above named category
         // target friend is = Friend argument named friend
         // TO-DO send request to server
-        Servera.ShareCategory(friend, cat_id);
+        Servera.ShareCategory(friend, cat_id, cat_name);
     }
 }
 

@@ -287,11 +287,14 @@ class DeleteingCategory extends AsyncTask< Integer, Void, String> {
 class SharingCategory extends AsyncTask< Integer, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
-    private Integer friend_id;
+    private String friend_name;
     private Integer cat_id;
-    public SharingCategory(Integer friend, Integer cat){
-        friend_id = friend;
+    private String cat_name;
+    public SharingCategory(String friend, Integer cat,String catname){
+        friend_name = friend;
+
         cat_id = cat;
+        cat_name = catname;
     }
 
     @Override
@@ -306,7 +309,7 @@ class SharingCategory extends AsyncTask< Integer, Void, String> {
         //set the stored user id
         Integer userid = params[0];
         try {
-            return myApiService.shareCategory(friend_id, userid, cat_id).execute().getData();
+            return myApiService.shareCategory(friend_name, userid, cat_id, cat_name).execute().getData();
 
         } catch (IOException e) {
             return e.getMessage();
@@ -456,8 +459,9 @@ public class ServerAPI {
         deletingc.execute(cat_id);
     }
     //Starts the asynchronus task of adding a category
-    public void ShareCategory(Friend friend, Integer cat_id){
-        SharingCategory sharingc = new SharingCategory(friend.getID(), cat_id);
+    public void ShareCategory(Friend friend, Integer cat_id, String cat_name){
+
+        SharingCategory sharingc = new SharingCategory(friend.getUsername(), cat_id, cat_name);
         sharingc.execute(UserID);
     }
     //Starts the asynchronus task of adding a category

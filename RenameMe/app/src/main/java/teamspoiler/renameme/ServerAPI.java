@@ -317,12 +317,12 @@ class SharingCategory extends AsyncTask< Integer, Void, String> {
     }
 }
 //Asynchronous task to check if share category is already in
-class CheckShare extends AsyncTask<Pair<Integer,Integer>, Void, Pair<Pair<String, String>,Integer>> {
+class CheckShare extends AsyncTask<Pair<Integer,Integer>, Void, Pair<Pair<String, String>,String>> {
     private static MyApi myApiService = null;
     private Context context;
 
     @Override
-    protected Pair<Pair<String, String>,Integer> doInBackground(Pair<Integer, Integer>... params) {
+    protected Pair<Pair<String, String>,String> doInBackground(Pair<Integer, Integer>... params) {
         if (myApiService == null) {
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
@@ -337,10 +337,11 @@ class CheckShare extends AsyncTask<Pair<Integer,Integer>, Void, Pair<Pair<String
             String s = myApiService.checkShareCategory(user_id).execute().getData();
             String name = myApiService.checkShareCategory(user_id).execute().getShareName();
             Pair<String , String> data = new Pair<String, String>(s,name);
-            Integer d = myApiService.checkShareCategory(user_id).execute().getShareCat();
-            return new Pair<Pair<String , String>, Integer>(data, d);
+            String d = myApiService.checkShareCategory(user_id).execute().getShareCat();
+            //Integer num = Integer.parseInt(d);
+            return new Pair<Pair<String , String>, String>(data, d);
         } catch (IOException e) {
-            return new Pair<Pair<String , String>, Integer>(new Pair<String ,String>(e.getMessage(), "sdf"), -1);
+            return new Pair<Pair<String , String>, String>(new Pair<String ,String>(e.getMessage(), "sdf"), e.getMessage());
         }
     }
 }
@@ -465,18 +466,18 @@ public class ServerAPI {
         sharingc.execute(UserID);
     }
     //Starts the asynchronus task of adding a category
-    public Pair<Boolean, Pair<Integer,String>> CheckShareCategory(){
+    public Pair<Boolean, Pair<String,String>> CheckShareCategory(){
         CheckShare checkshare = new CheckShare();
         try {
-            Pair<Pair<String, String> , Integer> s = checkshare.execute(new Pair<Integer, Integer>(UserID, 123)).get();
-            return new Pair<Boolean, Pair<Integer,String>>(s.first.first.equals("true"), new Pair<Integer, String>(s.second, s.first.second));
+            Pair<Pair<String, String> , String> s = checkshare.execute(new Pair<Integer, Integer>(UserID, 123)).get();
+            return new Pair<Boolean, Pair<String,String>>(s.first.first.equals("true"), new Pair<String, String>(s.second, s.first.second));
             //return new Pair<Boolean, Integer>(false, 234);
         }
         catch (InterruptedException e )
         {
-            return new Pair<Boolean, Pair<Integer,String>>(false,new Pair<Integer, String>( -1, ""));
+            return new Pair<Boolean, Pair<String,String>>(false,new Pair<String, String>( e.getMessage(), ""));
         }catch (ExecutionException b ) {
-            return new Pair<Boolean, Pair<Integer,String>>(false,new Pair<Integer, String>( -1, ""));
+            return new Pair<Boolean, Pair<String,String>>(false,new Pair<String, String>( b.getMessage(), ""));
         }
     }
     //starts the asynchronus task of adding share category items

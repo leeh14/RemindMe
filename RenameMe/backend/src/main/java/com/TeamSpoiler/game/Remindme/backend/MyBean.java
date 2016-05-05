@@ -31,11 +31,10 @@ public class MyBean {
     public void addItem(String item){items.add(item);}
     public List<String> getItems(){return items;}
 
-    private Integer shareCat =-1;
+    private String shareCat = "";
     private String shareName = "";
     public void setShareName(String cat_name){shareName = cat_name;}
     public String getShareName(){return shareName;}
-    public void setShareCat(Integer cat){shareCat = cat;}
-
-    public Integer getShareCar(){return shareCat;}
+    public void setShareCat(String cat){shareCat = cat;}
+    public String getShareCat(){return shareCat;}
 }

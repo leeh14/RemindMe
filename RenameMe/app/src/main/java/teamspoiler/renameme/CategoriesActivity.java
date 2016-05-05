@@ -70,7 +70,7 @@ public class CategoriesActivity extends AppCompatActivity {
     // populate the category list with category button
     private void populateCategoryList() {
         //adding to categories from the share
-        Pair<Boolean, Pair<Integer,String>> check = Servera.CheckShareCategory();
+        Pair<Boolean, Pair<String,String>> check = Servera.CheckShareCategory();
         if(check.first == true){
             Integer cat_id;
             //check current database and see if category is in if not add it
@@ -91,7 +91,8 @@ public class CategoriesActivity extends AppCompatActivity {
                      ) {
                     String delims = "|";
                     String[] item_values= s.split(delims);
-                    Item item = new Item(item_values[0],check.second.first );
+                    Integer cat_num= Integer.parseInt(check.second.first);
+                    Item item = new Item(item_values[0],cat_num );
                     LocalDateTime dateTime = LocalDateTime.parse(item_values[1]);
                     item.setDate(dateTime);
                     item.setNote(item_values[2]);

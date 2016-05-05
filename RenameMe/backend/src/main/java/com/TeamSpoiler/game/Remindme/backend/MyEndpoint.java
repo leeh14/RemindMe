@@ -414,7 +414,7 @@ public class MyEndpoint {
                 while(result.next()) {
                     if(result.getString(1).equals("true")) {
                         response.setData(result.getString(1));
-                        response.setShareCat(result.getInt("cat_id"));
+                        response.setShareCat(result.getString("cat_id"));
                         response.setShareName(result.getString(3));
                         break;
                     }

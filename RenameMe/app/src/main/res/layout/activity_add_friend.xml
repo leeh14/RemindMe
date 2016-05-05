@@ -40,28 +40,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Share Key"
-        android:id="@+id/AddFriend_ShareKeyTitle"
-        android:layout_marginTop="44dp"
-        android:layout_below="@+id/AddFriend_NameInput"
-        android:layout_alignLeft="@+id/AddFriend_UsernameTitle"
-        android:layout_alignStart="@+id/AddFriend_UsernameTitle" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Key"
-        android:ems="10"
-        android:id="@+id/AddFriend_ShareKeyInput"
-        android:layout_below="@+id/AddFriend_ShareKeyTitle"
-        android:layout_alignLeft="@+id/AddFriend_NameInput"
-        android:layout_alignStart="@+id/AddFriend_NameInput"
-        android:layout_marginTop="20dp" />
 
     <Button
         android:layout_width="120sp"

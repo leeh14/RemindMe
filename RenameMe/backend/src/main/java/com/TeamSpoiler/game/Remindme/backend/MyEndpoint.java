@@ -107,6 +107,11 @@ public class MyEndpoint {
                 ResultSet result =  conn.createStatement().executeQuery("select case when u.username = '"+u_name+ "' and u.password = '"+ u_pass+"'   then 'true' else 'false' end, u.u_id from users u");
                 //grab the user id on the server and whether or not username password exist
                 while(result.next()) {
+                    if(result.getString(1).equals("true")){
+                        response.setData("true");
+                        response.setID(result.getInt(2));
+                        break;
+                    }
                     response.setData(result.getString(1));
                     response.setID(result.getInt(2));
                 }

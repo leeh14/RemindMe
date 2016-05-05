@@ -412,9 +412,12 @@ public class MyEndpoint {
                 ResultSet result =  conn.createStatement().executeQuery("select case when (sc.user_id = '"+user_id+ "' OR sc.friend_id  = '"+ user_id+"') then 'true' else 'false' end, sc.cat_id, sc.cat_name from sharecategories sc");
                 //grab the user id on the server and whether or not username password exist
                 while(result.next()) {
-                    response.setData(result.getString(1));
-                    response.setShareCat(result.getInt(3));
-                    response.setShareName(result.getString(4));
+                    if(result.getString(1).equals("true")) {
+                        response.setData(result.getString(1));
+                        response.setShareCat(result.getInt(3));
+                        response.setShareName(result.getString(4));
+                        break;
+                    }
                 }
 
             }finally {

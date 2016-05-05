@@ -35,6 +35,7 @@ public class ShareCategoryActivity extends AppCompatActivity {
             cid = extras.getInt("Category_ID");
         }
         db = DatabaseHelperClass.getInstance(this);
+        Servera = ServerAPI.getInstance(this);
         category = db.getCategory(cid);
         friends = db.getFriends();
         final Button Save = (Button) findViewById(R.id.ShareCate_ShareButton);
@@ -121,7 +122,7 @@ public class ShareCategoryActivity extends AppCompatActivity {
         // target category is = static variable above named category
         // target friend is = Friend argument named friend
         // TO-DO send request to server
-
+        Servera.ShareCategory(friend, cat_id);
     }
 }
 

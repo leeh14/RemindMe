@@ -126,6 +126,7 @@ public class CategoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent ShareIntent = new Intent(v.getContext(), ShareCategoryActivity.class);
+                ShareIntent.putExtra("Category_ID", cid);
                 startActivity(ShareIntent);
             }
         }));

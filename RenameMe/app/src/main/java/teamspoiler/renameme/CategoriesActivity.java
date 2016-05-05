@@ -125,6 +125,8 @@ public class CategoriesActivity extends AppCompatActivity {
         if (requestCode == ADD_CATEGORY_REQUEST || requestCode == MERGE_CATEGORY_REQUEST) {
             finish();
             startActivity(getIntent());
+
+            //ShareIntent.putExtra("Category_ID", cid);
         }
     }
 }

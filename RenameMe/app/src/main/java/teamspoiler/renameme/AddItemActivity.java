@@ -46,7 +46,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         final Calendar Cal = Calendar.getInstance();
         sMinute = Cal.get(Calendar.MINUTE);
-        sHour = Cal.get(Calendar.HOUR);
+        sHour = Cal.get(Calendar.HOUR_OF_DAY);
         sDay = Cal.get(Calendar.DAY_OF_MONTH);
         sMonth = Cal.get(Calendar.MONTH);
         sYear = Cal.get(Calendar.YEAR);

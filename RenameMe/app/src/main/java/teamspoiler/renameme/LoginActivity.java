@@ -50,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
                     //Servera.Connect();
                     // move to CategoriesActivity
                     Intent i = new Intent(LoginActivity.this, CategoriesActivity.class);
+                    //Intent clear = new Intent(LoginActivity.this, DeleteDatabaseActivity.class);
+                    //startActivity(clear);
                     startActivity(i);
                 }else{
                     Intent i = new Intent(LoginActivity.this, CategoriesActivity.class);

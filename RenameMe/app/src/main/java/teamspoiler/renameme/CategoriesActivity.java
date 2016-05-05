@@ -70,36 +70,36 @@ public class CategoriesActivity extends AppCompatActivity {
     // populate the category list with category button
     private void populateCategoryList() {
         //adding to categories from the share
-        Pair<Boolean, Pair<String,String>> check = Servera.CheckShareCategory();
-        if(check.first == true){
-            Integer cat_id;
-            //check current database and see if category is in if not add it
-            Boolean add = true;
-            for (Category i : db.getCategories())
-                if(i.getName().equals(check.second.second)){
-                    cat_id = i.getID();
-                    add = false;
-                    break;
-                }
-            //if add remains true must create the category
-            if(add == true){
-                Category c = new Category(check.second.second);
-                db.addCategory(c);
-                //creating the new items in new category
-                List<String> new_item = Servera.AddShare(c.getID());
-                for (String s: new_item
-                     ) {
-                    String delims = "|";
-                    String[] item_values= s.split(delims);
-                    Integer cat_num= Integer.parseInt(check.second.first);
-                    Item item = new Item(item_values[0],cat_num );
-                    LocalDateTime dateTime = LocalDateTime.parse(item_values[1]);
-                    item.setDate(dateTime);
-                    item.setNote(item_values[2]);
-                    db.addItem(item);
-                }
-            }
-        }
+//        Pair<Boolean, Pair<String,String>> check = Servera.CheckShareCategory();
+//        if(check.first == true){
+//            Integer cat_id;
+//            //check current database and see if category is in if not add it
+//            Boolean add = true;
+//            for (Category i : db.getCategories())
+//                if(i.getName().equals(check.second.second)){
+//                    cat_id = i.getID();
+//                    add = false;
+//                    break;
+//                }
+//            //if add remains true must create the category
+//            if(add == true){
+//                Category c = new Category(check.second.second);
+//                db.addCategory(c);
+//                //creating the new items in new category
+//                List<String> new_item = Servera.AddShare(c.getID());
+//                for (String s: new_item
+//                     ) {
+//                    String delims = "|";
+//                    String[] item_values= s.split(delims);
+//                    Integer cat_num= Integer.parseInt(check.second.first);
+//                    Item item = new Item(item_values[0],cat_num );
+//                    LocalDateTime dateTime = LocalDateTime.parse(item_values[1]);
+//                    item.setDate(dateTime);
+//                    item.setNote(item_values[2]);
+//                    db.addItem(item);
+//                }
+//            }
+//        }
         //
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
                 this,

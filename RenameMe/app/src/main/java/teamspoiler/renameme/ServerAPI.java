@@ -476,7 +476,7 @@ public class ServerAPI {
         catch (InterruptedException e )
         {
             return new Pair<Boolean, Pair<String,String>>(false,new Pair<String, String>( e.getMessage(), ""));
-        }catch (ExecutionException b ) {
+        }catch (Exception b ) {
             return new Pair<Boolean, Pair<String,String>>(false,new Pair<String, String>( b.getMessage(), ""));
         }
     }

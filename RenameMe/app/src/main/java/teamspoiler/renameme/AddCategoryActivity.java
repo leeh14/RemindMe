@@ -28,7 +28,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         // get reference
         db = DatabaseHelperClass.getInstance(this);
         categories = db.getCategories();
-        serAPI = ServerAPI.getInstance(this);
+       // serAPI = ServerAPI.getInstance(this);
         // set buttons' function
         final Button Save = (Button) findViewById(R.id.AddCate_SaveButton);
         final Button Cancel = (Button) findViewById(R.id.AddCate_CancelButton);
@@ -41,7 +41,7 @@ public class AddCategoryActivity extends AppCompatActivity {
                 String categoryName = InputName.getText().toString(); // get username from input box
                 Category nc = new Category(categoryName);
                 db.addCategory(nc);
-                serAPI.AddingCat(nc);
+                //serAPI.AddingCat(nc);
 
                 finish();
             }

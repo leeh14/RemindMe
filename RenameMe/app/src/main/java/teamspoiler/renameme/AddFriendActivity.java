@@ -22,7 +22,7 @@ public class AddFriendActivity extends AppCompatActivity {
     private void initialize(){
         // get reference
         db = DatabaseHelperClass.getInstance(this);
-        serAPI = ServerAPI.getInstance(this);
+        //serAPI = ServerAPI.getInstance(this);
         final Button Submit = (Button) findViewById(R.id.AddFriend_SubmitButton);
         final Button Cancel = (Button) findViewById(R.id.AddFriend_CancelButton);
 
@@ -34,7 +34,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 TextView name = (TextView) findViewById(R.id.AddFriend_NameInput);
                 Friend nf = new Friend(name.getText().toString(),username.getText().toString());
                 db.addFriend(nf);
-                serAPI.AddingFriend(nf);
+                //serAPI.AddingFriend(nf);
                 finish();
             }
         }));

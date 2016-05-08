@@ -363,7 +363,12 @@ class AddShare extends AsyncTask<Integer, Void, List<String>> {
         Integer cat_id = params[0];
         try {
             //grab the response from backend and get the current user's id
-            return myApiService.addShareItems(cat_id).execute().getItems();
+            String s = myApiService.addShareItems(cat_id).execute().getData();
+            List<String> n = myApiService.addShareItems(cat_id).execute().getItems();
+            ArrayList<String> k = new ArrayList<String>(){{add("");}};
+            k.add(s);
+            //k.add(n.get(0));
+            return n;
 
         } catch (IOException e) {
             return new ArrayList<String>();

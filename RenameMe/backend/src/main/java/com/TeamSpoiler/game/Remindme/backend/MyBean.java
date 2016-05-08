@@ -29,7 +29,7 @@ public class MyBean {
     public Integer getUser_id(){return user_id;}
 
     //for share category implementation
-    private ArrayList<String>  items = new ArrayList<String>();
+    private ArrayList<String> items = new ArrayList<String>();
     public void addItem(String item){items.add(item);}
     public ArrayList<String>  getItems(){return items;}
 

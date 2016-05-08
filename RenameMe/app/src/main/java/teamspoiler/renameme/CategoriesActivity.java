@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
@@ -110,15 +111,16 @@ public class CategoriesActivity extends AppCompatActivity {
                     c.setID(Integer.parseInt(cat.first));
 
                     db.addCategory(c);
+                    //adding the items in that category
                     List<String> new_item = Servera.AddShare(Integer.parseInt(cat.first));
-                    if (new_item != null) {
+                    if (new_item != null ) {
                         for (String s: new_item
                                 ) {
-                            //String delims = "|";
                             String[] item_values= s.split(delims);
                             Integer cat_num= c.getID();
                             Item item = new Item(item_values[0],cat_num );
-                            LocalDateTime dateTime = LocalDateTime.parse(item_values[1]);
+                            DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-M-d H:m:s");
+                            LocalDateTime dateTime = LocalDateTime.parse(item_values[1],formatter);
                             item.setDate(dateTime);
                             item.setNote(item_values[2]);
                             db.addItem(item);

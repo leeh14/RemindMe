@@ -435,6 +435,7 @@ public class MyEndpoint {
     public MyBean AddShareItems(@Named("cat_id") Integer cat_id) {
         MyBean response = new MyBean();
         String url = null;
+        response.setData("before");
         try {
             if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
                 Class.forName("com.mysql.jdbc.GoogleDriver");
@@ -446,15 +447,17 @@ public class MyEndpoint {
         try{
             Connection conn = DriverManager.getConnection(url);
             try {
-                ResultSet result =  conn.createStatement().executeQuery("select * from items i WHERE i.cat_id = '" + cat_id+"')");
+                ResultSet result =  conn.createStatement().executeQuery("select * from items i WHERE i.cat_id = '" + cat_id+"'");
                 //grab the user id on the server and whether or not username password exist
                 while(result.next()) {
                     //item string is name + expirationdate + note
-                    String name = result.getString(3);
-                    String expirdate = result.getString(5);
-                    String note = result.getString(6);
-                    String item = name + "|" + expirdate + "|" + note;
+                    String name = result.getString("item_name");
+
+                    String expirdate = result.getTimestamp("expiration_date").toString().replaceAll("\\.\\d+", "");
+                    String note = result.getString("note");
+                    String item = name + "|" + expirdate + "|"  + note;
                     response.addItem(item);
+                    response.setData(item);
                 }
             }finally {
                 conn.close();

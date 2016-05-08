@@ -12,6 +12,8 @@ import com.google.api.server.spi.config.ApiNamespace;
 
 import java.sql.*;
 import java.io.*;
+import java.util.HashMap;
+
 import javax.servlet.http.*;
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.appengine.repackaged.org.joda.time.LocalDateTime;
@@ -61,7 +63,7 @@ public class MyEndpoint {
 
                 //createing the Categories  table
                 //conn.createStatement().execute("CREATE TABLE categories (cat_id INTEGER AUTO_INCREMENT, u_id INTEGER NOT NULL, cat_name VARCHAR(255) NOT NULL, PRIMARY KEY (cat_id,u_id)) ;");
-
+                //conn.createStatement().execute("alter table items drop primary key , add primary key(item_id,u_id, item_name)");
                 //conn.createStatement().execute("DROP TABLE item");
                 //createing the item  table
                 //conn.createStatement().execute("CREATE TABLE items (item_id INTEGER AUTO_INCREMENT, u_id INTEGER NOT NULL, item_name VARCHAR(255) NOT NULL, cat_id INTEGER NOT NULL REFERENCES categories(cat_id) ON DELETE CASCADE, expiration_date DATETIME NOT NULL, note VARCHAR(255),  PRIMARY KEY (item_id,u_id)) ;");
@@ -231,7 +233,7 @@ public class MyEndpoint {
                 //message to hold and return if there are any errors
                 response.setData("Adding");
                 //MYSQL insert statement
-                conn.createStatement().execute("INSERT INTO items(item_id,u_id, item_name,cat_id, expiration_date, note) VALUES('" + item_id + "','" + userid + " ','" + item_name + "','" + cat_id + "',STR_TO_DATE('" + expire + "','%Y-%m-%d %h:%i:%s'),'" + note + "')" );
+                conn.createStatement().execute("INSERT INTO items(item_id,u_id, item_name,cat_id, expiration_date, note) VALUES('" + item_id + "','" + userid + " ','" + item_name + "','" + cat_id + "',STR_TO_DATE('" + expire + "','%Y-%m-%d %H:%i:%s'),'" + note + "')" );
             }finally {
                 conn.close();
             }
@@ -413,10 +415,10 @@ public class MyEndpoint {
                 //grab the user id on the server and whether or not username password exist
                 while(result.next()) {
                     if(result.getString(1).equals("true")) {
-                        response.setData(result.getString(1));
-                        response.setShareCat(result.getString("cat_id"));
-                        response.setShareName(result.getString(3));
-                        break;
+                        response.setData("true");
+                        String cat_name = result.getString(3);
+                        String cat = result.getString("cat_id") + "|" +cat_name;
+                        response.addCategory(cat);
                     }
                 }
 
@@ -444,11 +446,14 @@ public class MyEndpoint {
         try{
             Connection conn = DriverManager.getConnection(url);
             try {
-                ResultSet result =  conn.createStatement().executeQuery("select * from categories c WHERE c.cat_id = '" + cat_id+"')");
+                ResultSet result =  conn.createStatement().executeQuery("select * from items i WHERE i.cat_id = '" + cat_id+"')");
                 //grab the user id on the server and whether or not username password exist
                 while(result.next()) {
                     //item string is name + expirationdate + note
-                    String item = result.getString(3) + "|" + result.getString(5) + "|" + result.getString(6);
+                    String name = result.getString(3);
+                    String expirdate = result.getString(5);
+                    String note = result.getString(6);
+                    String item = name + "|" + expirdate + "|" + note;
                     response.addItem(item);
                 }
             }finally {

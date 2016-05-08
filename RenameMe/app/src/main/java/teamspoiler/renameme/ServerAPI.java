@@ -2,6 +2,7 @@ package teamspoiler.renameme;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import org.joda.time.LocalDateTime;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -317,12 +319,12 @@ class SharingCategory extends AsyncTask< Integer, Void, String> {
     }
 }
 //Asynchronous task to check if share category is already in
-class CheckShare extends AsyncTask<Pair<Integer,Integer>, Void, Pair<Pair<String, String>,String>> {
+class CheckShare extends AsyncTask<Pair<Integer,Integer>, Void, Pair<String, List<String>>> {
     private static MyApi myApiService = null;
     private Context context;
 
     @Override
-    protected Pair<Pair<String, String>,String> doInBackground(Pair<Integer, Integer>... params) {
+    protected Pair<String, List<String>> doInBackground(Pair<Integer, Integer>... params) {
         if (myApiService == null) {
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
@@ -335,13 +337,12 @@ class CheckShare extends AsyncTask<Pair<Integer,Integer>, Void, Pair<Pair<String
         try {
             //grab the response from backend and get the current user's id
             String s = myApiService.checkShareCategory(user_id).execute().getData();
-            String name = myApiService.checkShareCategory(user_id).execute().getShareName();
-            Pair<String , String> data = new Pair<String, String>(s,name);
-            String d = myApiService.checkShareCategory(user_id).execute().getShareCat();
+            List<String>cats = myApiService.checkShareCategory(user_id).execute().getCategories();
+
+            return new Pair<String, List<String>>(s, cats);
             //Integer num = Integer.parseInt(d);
-            return new Pair<Pair<String , String>, String>(data, d);
         } catch (IOException e) {
-            return new Pair<Pair<String , String>, String>(new Pair<String ,String>(e.getMessage(), "sdf"), e.getMessage());
+            return new Pair<String, List<String>>(e.getMessage(), new ArrayList<String>(){{add("");}});
         }
     }
 }
@@ -466,25 +467,27 @@ public class ServerAPI {
         sharingc.execute(UserID);
     }
     //Starts the asynchronus task of adding a category
-    public Pair<Boolean, Pair<String,String>> CheckShareCategory(){
+    public Pair<Boolean, List<String>> CheckShareCategory(){
         CheckShare checkshare = new CheckShare();
         try {
-            Pair<Pair<String, String> , String> s = checkshare.execute(new Pair<Integer, Integer>(UserID, 123)).get();
-            return new Pair<Boolean, Pair<String,String>>(s.first.first.equals("true"), new Pair<String, String>(s.second, s.first.second));
+            Pair<String, List<String>> s = checkshare.execute(new Pair<Integer, Integer>(UserID, 123)).get();
+            return new Pair<Boolean, List<String>>(s.first.equals("true"),s.second);
             //return new Pair<Boolean, Integer>(false, 234);
         }
         catch (InterruptedException e )
         {
-            return new Pair<Boolean, Pair<String,String>>(false,new Pair<String, String>( e.getMessage(), ""));
+            return new Pair<Boolean, List<String>>(false, new ArrayList<String>(){{add("");}});
         }catch (Exception b ) {
-            return new Pair<Boolean, Pair<String,String>>(false,new Pair<String, String>( b.getMessage(), ""));
+            return new Pair<Boolean, List<String>>(false, new ArrayList<String>(){{add("");}});
         }
     }
     //starts the asynchronus task of adding share category items
     public List<String> AddShare(Integer cat_id){
         AddShare addingshare = new AddShare();
         try {
-            return addingshare.execute(cat_id).get();
+            List<String> s = addingshare.execute(cat_id).get();
+            String d ="Sdf";
+            return s;
         }
         catch (InterruptedException e )
         {
@@ -496,7 +499,18 @@ public class ServerAPI {
     //Starts the asynchronus task of updating an item
     public void AddItem(Item item){
         AddingItem addingi = new AddingItem(item);
-        addingi.execute( UserID);
+        //addingi.execute( UserID);
+        try {
+            String s = addingi.execute(UserID).get();
+            String d ="Sdf";
+
+        }
+        catch (InterruptedException e )
+        {
+            String  s ="";
+        }catch (ExecutionException b ) {
+            String c = b.getMessage();
+        }
     }
     //Starts the asynchronus task of updating an item
     public void UpdateItem(Item item)

@@ -42,6 +42,7 @@ public class EditItemActivity extends AppCompatActivity {
             iid = extras.getInt(getString(R.string.extra_item_id));
         }
         db = DatabaseHelperClass.getInstance(this);
+        ServApi = ServerAPI.getInstance(this);
         item = db.getItem(iid);
 
         final TextView Name = (TextView) findViewById(R.id.EditItem_Name);
@@ -122,7 +123,7 @@ public class EditItemActivity extends AppCompatActivity {
                 item.setDate(new LocalDateTime(sYear, sMonth+1, sDay, sHour, sMinute));
                 item.setNote(Note.getText().toString());
                 db.updateItem(item);
-                //ServApi.UpdateItem(item);
+                ServApi.UpdateItem(item);
                 ItemNotification.notify(EditItemActivity.this, item);
                 finish();
             }

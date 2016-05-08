@@ -71,45 +71,62 @@ public class CategoriesActivity extends AppCompatActivity {
     //Add categeories on the server that were shared with you by other users
     private void pullSharedCategories() {
         //adding to categories from the share
-        Pair<Boolean, Pair<String,String>> check = Servera.CheckShareCategory();
+        Pair<Boolean, List<String>> check = Servera.CheckShareCategory();
         if(check.first == true){
-            int cat_id;
-            //check current database and see if category is in if not add it
-            Boolean add = true;
+            ArrayList<Pair<String, String>> new_cat = new ArrayList<Pair<String, String>>();
+            String delims = "\\|";
+            Pair<String, String> tempcat = new Pair<String, String>("","");
             for (Category i : db.getCategories())
-                if(i.getName().equals(check.second.second)){
-                    cat_id = i.getID();
-                    add = false;
-                    break;
-                }
-            //if add remains true must create the category
-            if(add == true && check.second.second != null){
-                Category c = new Category(check.second.second);
-                db.addCategory(c);
-                //creating the new items in new category
-                /*List<String> new_item = Servera.AddShare(Integer.parseInt(check.second.first));
-                if (new_item != null) {
-                    for (String s: new_item
-                            ) {
-                        String delims = "|";
-                        String[] item_values= s.split(delims);
-                        Integer cat_num= c.getID();
-                        Item item = new Item(item_values[0],cat_num );
-                        LocalDateTime dateTime = LocalDateTime.parse(item_values[1]);
-                        item.setDate(dateTime);
-                        item.setNote(item_values[2]);
-                        db.addItem(item);
+                //second for loop to iterate through all categories
+                for(String category : check.second) {
+                    //split the string into 2 parts
+                    String[] categories = category.split(delims);
+                    if (i.getName().equals(categories[1])) {
+                        //exist so reset tempcat to nothing and break
+                        tempcat = new Pair<String, String>("","");
+                        break;
+
+                    }else {
+                        tempcat = new Pair<String, String>(categories[0],categories[1]);
                     }
-                }*/
-                if (c.getName().equals("Immunizations")) {
-                    Item item = new Item("Flu Shot", c.getID());
-                    item.setDate(new LocalDateTime(2016, 5, 5, 18, 0));
-                    item.setNote("Note");
-                    db.addItem(item);
+                }
+                //make sure it has a valid value before adding to it
+                if(!tempcat.first.equals("")){
+                    new_cat.add(tempcat);
+                }
+            //if database is empty still have to add the categories found
+            if(db.getCategories().toList().isEmpty()){
+                for(String category : check.second) {
+                    //split the string into 2 parts
+                    String[] categories = category.split(delims);
+                    new_cat.add(new Pair<String, String>(categories[0],categories[1]));
+                }
+            }
+            //if new_cat holds all the new categories that need to be built
+            if(!new_cat.isEmpty()){
+                //iterate through categories
+                for(Pair<String ,String> cat: new_cat){
+                    Category c = new Category(cat.second);
+                    c.setID(Integer.parseInt(cat.first));
+
+                    db.addCategory(c);
+                    List<String> new_item = Servera.AddShare(Integer.parseInt(cat.first));
+                    if (new_item != null) {
+                        for (String s: new_item
+                                ) {
+                            //String delims = "|";
+                            String[] item_values= s.split(delims);
+                            Integer cat_num= c.getID();
+                            Item item = new Item(item_values[0],cat_num );
+                            LocalDateTime dateTime = LocalDateTime.parse(item_values[1]);
+                            item.setDate(dateTime);
+                            item.setNote(item_values[2]);
+                            db.addItem(item);
+                        }
+                    }
                 }
             }
         }
-        //
     }
 
     // populate the category list with category button

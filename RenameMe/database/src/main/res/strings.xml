@@ -25,7 +25,7 @@
     <!--strings used for passing parameters within Android Intents-->
     <string name="extra_category_id">Category_ID</string>
     <string name="extra_item_id">Item_ID</string>
-    <string name="action_settings">Settings</string>
+
     <!--sorting method-->
     <string-array name="sort_array">
         <item>None</item>

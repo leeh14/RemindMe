@@ -37,7 +37,7 @@ public class ItemActivity extends AppCompatActivity {
             iid = extras.getInt(getString(R.string.extra_item_id));
         }
         db = DatabaseHelperClass.getInstance(this);
-        //serAPI = ServerAPI.getInstance(this);
+        serAPI = ServerAPI.getInstance(this);
         item = db.getItem(iid);
         cid = item.getCategoryID();
         category = db.getCategory(cid);
@@ -92,7 +92,7 @@ public class ItemActivity extends AppCompatActivity {
                         .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 db.deleteItem(item.getID());
-                                //serAPI.DeleteItem(item.getID());
+                                serAPI.DeleteItem(item.getID());
                                 finish();
                             }
                         })

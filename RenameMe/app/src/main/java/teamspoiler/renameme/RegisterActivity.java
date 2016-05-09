@@ -36,8 +36,14 @@ public class RegisterActivity extends AppCompatActivity {
 
                 }else{
                     //TO-DO pass data to register function on server
-                    serAPI.AddingUser(usernameText.trim(),passwordText.trim());
-                    finish();
+                    if(serAPI.CheckAuthenticate(usernameText.trim(), passwordText.trim())) {
+                        Toast.makeText(RegisterActivity.this,
+                                "Username and password already taken",
+                                Toast.LENGTH_LONG).show();
+                    }else {
+                        serAPI.AddingUser(usernameText.trim(), passwordText.trim());
+                        finish();
+                    }
                 }
             }
         }));

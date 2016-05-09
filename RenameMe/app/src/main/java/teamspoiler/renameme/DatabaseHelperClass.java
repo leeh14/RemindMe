@@ -106,6 +106,8 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
     public boolean addCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        if (category.getID() != 0)
+            contentValues.put(context.getString(R.string.key_id), category.getID());
         contentValues.put(context.getString(R.string.name), category.getName());
         long row = db.insert(context.getString(R.string.table_categories), null, contentValues);
         if (row != -1) {
@@ -118,6 +120,8 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
     public boolean addItem(Item item) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        if (item.getID() != 0)
+            contentValues.put(context.getString(R.string.key_id), item.getID());
         contentValues.put(context.getString(R.string.name), item.getName());
         contentValues.put(context.getString(R.string.item_date), FORMATTER.print(item.getDate()));
         contentValues.put(context.getString(R.string.item_note), item.getNote());
@@ -133,6 +137,8 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
     public boolean addFriend(Friend friend) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        if (friend.getID() != 0)
+            contentValues.put(context.getString(R.string.key_id), friend.getID());
         contentValues.put(context.getString(R.string.name), friend.getName());
         contentValues.put(context.getString(R.string.friend_username), friend.getUsername());
         long row = db.insert(context.getString(R.string.table_friends), null, contentValues);

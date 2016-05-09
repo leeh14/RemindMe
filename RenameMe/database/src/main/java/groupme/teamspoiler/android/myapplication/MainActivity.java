@@ -105,15 +105,18 @@ public class MainActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Category category = new Category(nameView.getText().toString());
+                category.setID(Integer.parseInt(idView.getText().toString()));
                 Item item = null;
                 if (!categoryIDView.getText().toString().isEmpty()) {
                     item = new Item(nameView.getText().toString(), Integer.parseInt(categoryIDView.getText().toString()));
+                    item.setID(Integer.parseInt(idView.getText().toString()));
                     item.setDate(LocalDateTime.now());
                     item.setNote(notesView.getText().toString());
                 }
                 Friend friend = new Friend(nameView.getText().toString(), usernameView.getText().toString());
+                friend.setID(Integer.parseInt(idView.getText().toString()));
 
-                if (idView.getText().toString().isEmpty()) {
+                if (!idView.getText().toString().isEmpty()) {
                     if (!usernameView.getText().toString().isEmpty())
                         db.addFriend(friend);
                     else if (!categoryIDView.getText().toString().isEmpty())
@@ -121,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                     else
                         db.addCategory(category);
                 }
-                else {
+                /*else {
                     category.setID(Integer.parseInt(idView.getText().toString()));
                     if(item != null)
                         item.setID(Integer.parseInt(idView.getText().toString()));
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                         db.updateItem(item);
                     else
                         db.updateCategory(category);
-                }
+                }*/
             }
         });
         delCatButton.setOnClickListener(new View.OnClickListener() {

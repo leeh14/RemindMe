@@ -50,6 +50,30 @@ class Authenticate extends AsyncTask<Pair<String,String>, Void, Pair<String, Int
         }
     }
 }
+//Asynchronous task to authenticate a user
+class CheckingUser extends AsyncTask<String, Void, String> {
+    private static MyApi myApiService = null;
+    private Context context;
+
+    @Override
+    protected String doInBackground(String... params) {
+        if (myApiService == null) {
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://headsup-1260.appspot.com/_ah/api/");
+            // end options for devappserver
+
+            myApiService = builder.build();
+        }
+        String uname = params[0];
+        try {
+            //grab the response from backend and get the current user's id
+            String s =  myApiService.checkUser(uname).execute().getData();
+            return s;
+        } catch (IOException e) {
+            return e.getMessage();
+        }
+    }
+}
 //Asynchronous task to add an User
 class AddingUser extends AsyncTask< Pair<String , String>, Void, String> {
     private static MyApi myApiService = null;
@@ -527,6 +551,21 @@ public class ServerAPI {
             UserID = s.second;
             //return whether or not the username and password is valid
             return s.first.equals("true");
+        }
+        catch (InterruptedException e )
+        {
+            return false;
+        }catch (ExecutionException b ) {
+            return false;
+        }
+    }
+    public boolean CheckingUser(String uname ){
+        CheckingUser checku = new CheckingUser();
+        try {
+            //starts asychronus task to make sure user is valid
+            String s = checku.execute(uname).get();
+            //return whether or not the username and password is valid
+            return s.equals("true");
         }
         catch (InterruptedException e )
         {

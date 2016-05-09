@@ -123,7 +123,41 @@ public class MyEndpoint {
         }
         return response;
     }
-
+    @ApiMethod(name = "CheckUser")
+    public MyBean CheckUser(@Named("uname") String u_name) {
+        MyBean response = new MyBean();
+        String url = null;
+        response.setData("verify");
+        try {
+            if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+                Class.forName("com.mysql.jdbc.GoogleDriver");
+                url = "jdbc:google:mysql://headsup-1260:headsup/Users?user=root";
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            Connection conn = DriverManager.getConnection(url);
+            try {
+                ResultSet result =  conn.createStatement().executeQuery("select case when u.username = '"+u_name+ "' then 'true' else 'false' end, u.u_id from users u");
+                //grab the user id on the server and whether or not username password exist
+                while(result.next()) {
+                    if(result.getString(1).equals("true")){
+                        response.setData("true");
+                        response.setID(result.getInt(2));
+                        break;
+                    }
+                    response.setData(result.getString(1));
+                    response.setID(result.getInt(2));
+                }
+            }finally {
+                conn.close();
+            }
+        }catch(SQLException e){
+            response.setData(e.toString());
+        }
+        return response;
+    }
     //Adding a category into the database
     @ApiMethod(name = "AddCategory")
     public MyBean AddCategory(@Named("cat_id") Integer cat_id , @Named("cat_name") String cat_name,@Named("userId") Integer userid ) {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import teamspoiler.renameme.DataElements.*;
 
@@ -34,7 +35,12 @@ public class AddFriendActivity extends AppCompatActivity {
                 TextView name = (TextView) findViewById(R.id.AddFriend_NameInput);
                 Friend nf = new Friend(name.getText().toString(),username.getText().toString());
                 db.addFriend(nf);
-                //serAPI.AddingFriend(nf);
+                if(serAPI.CheckingUser(nf.getUsername()) == true){
+                    serAPI.AddingFriend(nf);
+                }else{
+                    Toast.makeText(AddFriendActivity.this, "No user with that Username", Toast.LENGTH_LONG).show();
+                }
+
                 finish();
             }
         }));

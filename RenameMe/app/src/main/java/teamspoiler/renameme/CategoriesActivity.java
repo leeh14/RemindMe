@@ -70,33 +70,37 @@ public class CategoriesActivity extends AppCompatActivity {
     }
 
     //Add categeories on the server that were shared with you by other users
-    private void pullSharedCategories() {
+        private void pullSharedCategories() {
         //adding to categories from the share
         Pair<Boolean, List<String>> check = Servera.CheckShareCategory();
         if(check.first == true){
             ArrayList<Pair<String, String>> new_cat = new ArrayList<Pair<String, String>>();
             String delims = "\\|";
             Pair<String, String> tempcat = new Pair<String, String>("","");
-            for (Category i : db.getCategories())
+            for (Category i : db.getCategories()) {
                 //second for loop to iterate through all categories
-                for(String category : check.second) {
-                    //split the string into 2 parts
-                    String[] categories = category.split(delims);
-                    if (i.getName().equals(categories[1])) {
-                        //exist so reset tempcat to nothing and break
-                        tempcat = new Pair<String, String>("","");
-                        break;
+                if (check.second != null) {
+                    for (String category : check.second) {
+                        //split the string into 2 parts
+                        String[] categories = category.split(delims);
+                        if (i.getName().equals(categories[1])) {
+                            //exist so reset tempcat to nothing and break
+                            check.second.remove(i.getName());
+                            tempcat = new Pair<String, String>("", "");
+                            break;
 
-                    }else {
-                        tempcat = new Pair<String, String>(categories[0],categories[1]);
+                        } else {
+                            tempcat = new Pair<String, String>(categories[0], categories[1]);
+                        }
                     }
                 }
                 //make sure it has a valid value before adding to it
-                if(!tempcat.first.equals("")){
+                if (!tempcat.first.equals("")) {
                     new_cat.add(tempcat);
                 }
+            }
             //if database is empty still have to add the categories found
-            if(db.getCategories().toList().isEmpty()){
+            if(db.getCategories().toList().isEmpty() || db.getCategories().toList().size() < check.second.size()){
                 for(String category : check.second) {
                     //split the string into 2 parts
                     String[] categories = category.split(delims);

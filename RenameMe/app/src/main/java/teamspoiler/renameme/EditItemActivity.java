@@ -62,7 +62,7 @@ public class EditItemActivity extends AppCompatActivity {
             sDay = date.getDayOfMonth();
             sMonth = date.getMonthOfYear();
             sYear = date.getYear();
-            ExpDate.setText((sMonth+1) + "/"
+            ExpDate.setText((sMonth) + "/"
                     + sDay + "/" + sYear);
             ExpTime.setText(sHour + ":"
                     + sMinute);
@@ -120,12 +120,21 @@ public class EditItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 item.setName(Name.getText().toString());
-                item.setDate(new LocalDateTime(sYear, sMonth+1, sDay, sHour, sMinute));
+                item.setDate(new LocalDateTime(sYear, sMonth + 1, sDay, sHour, sMinute));
                 item.setNote(Note.getText().toString());
-                db.updateItem(item);
-                ServApi.UpdateItem(item);
-                ItemNotification.notify(EditItemActivity.this, item);
-                finish();
+
+                if (item.getName() == null || item.getName().isEmpty()) {
+                    Toast.makeText(EditItemActivity.this, "You must specify an item name", Toast.LENGTH_LONG).show();
+                }
+                else if (item.getDate().isBefore(LocalDateTime.now())) {
+                    Toast.makeText(EditItemActivity.this, "Expiration date must be after the current time", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    db.updateItem(item);
+                    ServApi.UpdateItem(item);
+                    ItemNotification.notify(EditItemActivity.this, item);
+                    finish();
+                }
             }
         }));
 

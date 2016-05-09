@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
 import org.joda.time.LocalDateTime;
 import java.util.Calendar;
 
@@ -100,12 +102,21 @@ public class AddItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Item item = new Item(Name.getText().toString(), cid);
-                item.setDate(new LocalDateTime(sYear, sMonth+1, sDay, sHour, sMinute));
+                item.setDate(new LocalDateTime(sYear, sMonth + 1, sDay, sHour, sMinute));
                 item.setNote(Note.getText().toString());
-                Boolean k = db.addItem(item);
-                serAPI.AddItem(item);
-                ItemNotification.notify(AddItemActivity.this, item);
-                finish();
+                if (item.getName() == null || item.getName().isEmpty()) {
+                    Toast.makeText(AddItemActivity.this, "You must specify an item name", Toast.LENGTH_LONG).show();
+                }
+                else if (item.getDate().isBefore(LocalDateTime.now())) {
+                    Toast.makeText(AddItemActivity.this, "Expiration date must be after the current time", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Boolean k = db.addItem(item);
+                    serAPI.AddItem(item);
+                    ItemNotification.notify(AddItemActivity.this, item);
+                    finish();
+                }
+
             }
         });
 
@@ -117,7 +128,7 @@ public class AddItemActivity extends AppCompatActivity {
            }
        });
 
-        DateText.setText((sMonth+1) + "/" + sDay + "/" + sYear);
-        TimeText.setText(sHour + ":" +  sMinute);
+        DateText.setText((sMonth + 1) + "/" + sDay + "/" + sYear);
+        TimeText.setText(sHour + ":" + sMinute);
     }
 }
